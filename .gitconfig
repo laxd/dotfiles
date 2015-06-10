@@ -1,0 +1,8 @@
+[user]
+	email = lawrence@lawrenceandrews.co.uk
+	name = Lawrence Andrews
+[push]
+	default = simple
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim

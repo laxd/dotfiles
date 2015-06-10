@@ -1,0 +1,26 @@
+# Log files
+*.log
+
+# Compiled code
+target
+*.class
+*.jar 
+*.war
+*.pyc
+
+# Packages
+*.zip
+*.tar
+*.rar
+*.gz
+
+# IDE files
+*.iml
+.idea
+.classpath
+.project
+
+# Temp files
+*.tmp
+.*.sw*
+
