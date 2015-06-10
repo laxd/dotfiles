@@ -1,0 +1,46 @@
+# This following file should contain all of the following variables:
+#
+# my_username - Username for imap/smtp
+# my_password - Password for imap/smtp
+# my_imap_domain - imap server domain
+# my_smtp_domain - smtp server domain
+# my_drafts_folder_name - Folder name to use for drafts.
+# my_sent_folder_name - Folder name to use for sent items.
+# my_trash_folder_name - Folder name to use for trash.
+# my_realname - Your real name.
+#
+source "~/.mutt/imapconfig"
+
+# IMAP config
+set imap_user="$my_username"
+set imap_pass=$my_password
+
+set folder="imaps://$my_imap_domain:993/"
+set spoolfile="+INBOX"
+set postponed="+$my_drafts_folder_name"
+set record="+$my_sent_folder_name"
+#set trash="+$my_trash_folder_name"
+mailboxes
+
+set imap_check_subscribed="yes"
+set imap_list_subscribed="yes"
+set timeout=15
+set mail_check=90
+set imap_keepalive=180
+set imap_idle
+unset mark_old
+set ssl_use_sslv3=yes
+
+# SMTP config
+set realname = $my_realname
+set from = "$my_username"
+set smtp_pass = $my_password
+set hostname = $my_smtp_domain
+set smtp_url = "smtp://$my_username@$my_smtp_domain:465/"
+set ssl_force_tls = yes
+set smtp_authenticators = "login"
+
+set signature="~/.mutt/signature"
+set message_cachedir="~/.mutt/message_cache"
+set header_cache="~/.mutt/header_cache"
+set tmpdir="~/.mutt/tmp"
