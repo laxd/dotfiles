@@ -43,4 +43,5 @@ set smtp_authenticators = "login"
 set signature="~/.mutt/signature"
 set message_cachedir="~/.mutt/message_cache"
 set header_cache="~/.mutt/header_cache"
+# IMPORTANT - Make sure this directory exists!
 set tmpdir="~/.mutt/tmp"
