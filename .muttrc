@@ -31,6 +31,8 @@ set imap_idle
 unset mark_old
 set ssl_use_sslv3=yes
 
+set editor='vim + -c "setlocal wrapmargin=0 textwidth=0 wrap nocp linebreak nohlsearch"  -c "?^$"'
+
 # SMTP config
 set realname = $my_realname
 set from = "$my_username"
