@@ -1,0 +1,8 @@
+set my_username="username@yourdomain.co.uk"
+set my_password="super_secret_password"
+set my_imap_domain="mail.yourdomain.co.uk"
+set my_smtp_domain="mail.yourdomain.co.uk"
+set my_drafts_folder_name="Drafts"
+set my_sent_folder_name="Sent"
+set my_trash_folder_name="Trash"
+set my_realname="Mr Awesome"
