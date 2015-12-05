@@ -41,9 +41,6 @@ set listchars=tab:\|\
 " PLUGIN SETTINGS
 """"""""""""""""""
 
-" Load all plugins
-filetype off
-
 " First, make sure vundle is installed
 let vundle_installed=1
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
