@@ -1,10 +1,7 @@
 """"""""""""""""""
 " GENERAL SETTINGS
 """"""""""""""""""
-
-" Set numbers on the left
-set number
-set relativenumber
+" Set numbers on the left set number set relativenumber
 
 " Be iMproved
 set nocompatible
@@ -26,6 +23,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" Open new splits below/to the right of current pane
 set splitbelow
 set splitright
 
@@ -40,6 +38,9 @@ set listchars=tab:\|\
 """"""""""""""""""
 " PLUGIN SETTINGS
 """"""""""""""""""
+
+" Required for Vundle
+filetype off
 
 " First, make sure vundle is installed
 let vundle_installed=1
@@ -59,6 +60,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'ervandew/supertab'
+Plugin 'scrooloose/nerdtree'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
@@ -67,6 +69,8 @@ if vundle_installed == 0
 	echo ""
 	:PluginInstall
 endif
+
+filetype plugin indent on
 
 """"""""""""""""""
 " SYNTASTIC SETTINGS
@@ -82,3 +86,20 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+""""""""""""""""""
+" NERDTREE SETTINGS
+""""""""""""""""""
+
+" Open NERDTree when vim is opened...
+autocmd vimenter * NERDTree
+
+" But make the focus the opened file
+autocmd vimenter * wincmd l
+
+" Close NERDTree when it is the last open split
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Map Ctrl+n to open NERDTree window
+map <C-n> :NERDTreeToggle<CR>
+
