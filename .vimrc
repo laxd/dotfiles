@@ -94,8 +94,8 @@ let g:syntastic_check_on_wq = 0
 " Open NERDTree when vim is opened...
 autocmd vimenter * NERDTree
 
-" But make the focus the opened file
-autocmd vimenter * wincmd l
+" But make the focus the opened file (If there is one)
+autocmd vimenter * if argc() != 0 | wincmd l | endif
 
 " Close NERDTree when it is the last open split
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
