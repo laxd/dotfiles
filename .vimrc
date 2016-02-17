@@ -2,6 +2,8 @@
 " GENERAL SETTINGS
 """"""""""""""""""
 " Set numbers on the left set number set relativenumber
+set number
+set relativenumber
 
 " Be iMproved
 set nocompatible
