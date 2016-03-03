@@ -2,6 +2,8 @@
 " GENERAL SETTINGS
 """"""""""""""""""
 " Set numbers on the left set number set relativenumber
+set number
+set relativenumber
 
 " Be iMproved
 set nocompatible
@@ -61,6 +63,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'ervandew/supertab'
 Plugin 'scrooloose/nerdtree'
+Plugin 'ctrlpvim/ctrlp.vim'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
