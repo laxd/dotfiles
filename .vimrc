@@ -1,8 +1,9 @@
 """"""""""""""""""
-" GENERAL SETTINGS
-""""""""""""""""""
-" Set numbers on the left set number set relativenumber
+" GENERAL SETTINGS """"""""""""""""""
+" Set line number for current line
 set number
+
+" Set relative line numbers for all other lines
 set relativenumber
 
 " Be iMproved
@@ -10,10 +11,16 @@ set nocompatible
 
 " Syntax checking etc
 syntax on
-filetype plugin indent on
 
 " Map w!! to force save (i.e. opened without sudo)
 cmap w!! w !sudo tee > /dev/null %
+
+" Save and run tests
+map <F5> :w<CR>:make test<CR>
+
+" Allow incremental, highlighted search
+set incsearch
+set hlsearch
 
 """"""""""""""""""
 " SPLITS SETTINGS
@@ -60,10 +67,14 @@ set rtp+=~/.vim/bundle/vundle/
 
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'ervandew/supertab'
 Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Raimondi/delimitMate'
+Plugin 'airblade/vim-rooter'
+Plugin 'tfnico/vim-gradle'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
@@ -76,21 +87,6 @@ endif
 filetype plugin indent on
 
 """"""""""""""""""
-" SYNTASTIC SETTINGS
-""""""""""""""""""
-
-" Set status line for syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-" Syntastic options to check on open and quit.
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-""""""""""""""""""
 " NERDTREE SETTINGS
 """"""""""""""""""
 
@@ -101,8 +97,29 @@ autocmd vimenter * NERDTree
 autocmd vimenter * if argc() != 0 | wincmd l | endif
 
 " Close NERDTree when it is the last open split
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1) | q | endif
 
 " Map Ctrl+n to open NERDTree window
 map <C-n> :NERDTreeToggle<CR>
 
+""""""""""""""""""
+" ULTISNIPS SETTINGS
+""""""""""""""""""
+
+" Trigger Configuration
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+""""""""""""""""""
+" CTRLP SETTINGS
+""""""""""""""""""
+
+let g:ctrlp_map='<leader>t'
+
+" Ignore build/target directories
+set wildignore+=*/build/**
+set wildignore+=*/target/**
+
+" And don't do any caching
+let g:ctrlp_use_caching=0
