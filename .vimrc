@@ -40,6 +40,7 @@ set splitright
 " TAB SETTINGS
 """"""""""""""""""
 
+set shiftwidth=2
 set tabstop=2
 set list
 set listchars=tab:\|\ 
@@ -75,6 +76,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
 Plugin 'airblade/vim-rooter'
 Plugin 'tfnico/vim-gradle'
+Plugin 'rustushki/JavaImp.vim'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
@@ -97,7 +99,10 @@ autocmd vimenter * NERDTree
 autocmd vimenter * if argc() != 0 | wincmd l | endif
 
 " Close NERDTree when it is the last open split
-autocmd bufenter * if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif 
+
+" Allow us to update NERDTree when we open a new file
+map <leader>n :NERDTreeFind<CR>l<CR>
 
 " Map Ctrl+n to open NERDTree window
 map <C-n> :NERDTreeToggle<CR>
@@ -123,3 +128,19 @@ set wildignore+=*/target/**
 
 " And don't do any caching
 let g:ctrlp_use_caching=0
+
+""""""""""""""""""
+" JAVAIMP SETTINGS
+""""""""""""""""""
+
+" ONLY to be used with vim-rooter
+" (Not working yet...)
+" let projectRoot = s:FindRootDirectory()
+" Alternative that isn't as good
+let projectRoot = getcwd()
+
+let g:JavaImpPaths = 
+	\ $HOME . "/.m2/repositories," .
+	\ $HOME . "/.gradle/caches/modules-2/files-2.1," .
+	\ projectRoot . "/build," .
+	\ projectRoot . "/target"
