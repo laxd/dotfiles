@@ -81,4 +81,5 @@ source $ZSH/oh-my-zsh.sh
 alias open="xdg-open"
 
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+export PATH="/opt/gradle/bin:$PATH"
 
