@@ -18,6 +18,9 @@ cmap w!! w !sudo tee > /dev/null %
 " Save and run tests
 map <F5> :w<CR>:make test<CR>
 
+" Remove highlighting with enter
+nnoremap <CR> :noh<CR><CR>:<BACKSPACE>
+
 " Allow incremental, highlighted search
 set incsearch
 set hlsearch
@@ -72,11 +75,13 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets.git'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
 Plugin 'airblade/vim-rooter'
 Plugin 'tfnico/vim-gradle'
 Plugin 'rustushki/JavaImp.vim'
+Plugin 'tpope/vim-fugitive'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
@@ -112,7 +117,7 @@ map <C-n> :NERDTreeToggle<CR>
 """"""""""""""""""
 
 " Trigger Configuration
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<C-SPACE>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
