@@ -82,6 +82,7 @@ Plugin 'airblade/vim-rooter'
 Plugin 'tfnico/vim-gradle'
 Plugin 'rustushki/JavaImp.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'othree/xml.vim'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
