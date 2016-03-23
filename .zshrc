@@ -79,6 +79,19 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias open="xdg-open"
+mvln() { mv $1 $2 && ln -s $2 $1 }
+up() {
+	if [[ "$#" < 1 ]] ; then
+		cd ..
+	else
+		CDSTR=""
+		for i in {1..$1} ; do
+			CDSTR="../$CDSTR"
+		done
+		cd $CDSTR
+	fi
+}
+alias tojson="python -m json.tool"
 
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 export PATH="/opt/gradle/bin:$PATH"
