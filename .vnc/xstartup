@@ -22,4 +22,5 @@ vncconfig -iconic &
 	#*)
 		#echo "Must specify a valid Desktop Environment!";;
 #esac
+gdm &
 gnome-session --session=gnome-classic &

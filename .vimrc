@@ -99,7 +99,7 @@ filetype plugin indent on
 """"""""""""""""""
 
 " Open NERDTree when vim is opened...
-autocmd vimenter * NERDTree
+"autocmd vimenter * NERDTree
 
 " But make the focus the opened file (If there is one)
 autocmd vimenter * if argc() != 0 | wincmd l | endif
@@ -143,10 +143,8 @@ let g:ctrlp_use_caching=0
 " (Not working yet...)
 " let projectRoot = s:FindRootDirectory()
 " Alternative that isn't as good
-let projectRoot = getcwd()
+"let projectRoot = getcwd()
 
 let g:JavaImpPaths = 
-	\ $HOME . "/.m2/repositories," .
-	\ $HOME . "/.gradle/caches/modules-2/files-2.1," .
-	\ projectRoot . "/build," .
-	\ projectRoot . "/target"
+	\ "$HOME/.m2/repositories," .
+	\ "$HOME/.gradle/caches/modules-2/files-2.1"

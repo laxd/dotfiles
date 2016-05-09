@@ -97,3 +97,5 @@ export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 export PATH="/opt/gradle/bin:$PATH"
 export TZ='Europe/London'
 
+archey3
+
