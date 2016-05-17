@@ -79,7 +79,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias open="xdg-open"
-mvln() { mv $1 $2 && ln -s $2 $1 }
+mvln() { mkdir -p $2 && rmdir $2 && mv $1 $2 && ln -s $2 $1 }
 up() {
 	if [[ "$#" < 1 ]] ; then
 		cd ..
