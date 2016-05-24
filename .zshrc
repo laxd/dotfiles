@@ -97,5 +97,14 @@ export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 export PATH="/opt/gradle/bin:$PATH"
 export TZ='Europe/London'
 
-archey3
+neofetch
 
+tmux_create_if_no_exists() {
+	if [[ ! `tmux list-sessions 2>/dev/null | cut -f1 -d: | grep ^$1$` ]]; then
+		sh -c "tmux new-session -d -s '$1' '$2'"
+	fi
+}
+
+# Setup some Tmux panes
+tmux_create_if_no_exists 'htop' 'htop'
+tmux_create_if_no_exists 'logs' 'journalctl -f'
