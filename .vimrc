@@ -76,13 +76,13 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets.git'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
 Plugin 'airblade/vim-rooter'
 Plugin 'tfnico/vim-gradle'
-Plugin 'rustushki/JavaImp.vim'
+"Plugin 'rustushki/JavaImp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'othree/xml.vim'
+Plugin 'artur-shaik/vim-javacomplete2'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
