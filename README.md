@@ -1,9 +1,12 @@
 Dotfiles personally used.
 
-Once checked out, set up symlinks to relevant files:
+```
+Setup
+```
+Either run setup.sh to symlink all dot files or symlink manually
 
 e.g.
 
 ln -s ~/workspace/dotfiles/.vimrc ~/.vimrc
 
-Vim plugins are downloaded automatically when starting vim for the first time
+Vundle is set up and Vim plugins are downloaded automatically when starting vim for the first time
