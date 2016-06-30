@@ -23,6 +23,8 @@ mvn.txt
 .idea
 .classpath
 .project
+venv
+.ropeproject
 
 # Temp files
 *.tmp
