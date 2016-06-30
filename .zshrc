@@ -92,6 +92,7 @@ up() {
 	fi
 }
 alias tojson="python -m json.tool"
+alias docker_rmi_untagged="docker rmi $(docker images | grep '<none>' | awk '{print $3}')"
 
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 export PATH="/opt/gradle/bin:$PATH"
