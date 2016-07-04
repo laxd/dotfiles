@@ -1,12 +1,15 @@
 #! /bin/bash
 
-FILES=( .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf )
+FILES=( .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup )
 DOTFILES=$(pwd)
 
 echo "Setting up symlinks for dotfiles..."
 for f in ${FILES[@]}; do
 	if [ ! -e ~/$f ]; then
 		echo Creating symlink for $f
+
+		# Create the parent directory if it doesn't exist
+		mkdir -p $(dirname ~/$f)
 		ln -s $DOTFILES/$f ~/$f
 	else
 		echo "~/$f already exists, skipping..."
