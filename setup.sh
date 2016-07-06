@@ -1,6 +1,6 @@
 #! /bin/bash
 
-FILES=( .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup )
+FILES=( .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup )
 DOTFILES=$(pwd)
 
 echo "Setting up symlinks for dotfiles..."

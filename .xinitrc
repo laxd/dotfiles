@@ -8,23 +8,13 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 # Source
 . /etc/X11/Xsession
 
-# merge in defaults and keymaps
+# Source Xresources
+[ -f $sysresources ] xrdb -merge $sysresources
+[ -f "$userresources" ] xrdb -merge "$userresources"
 
-if [ -f $sysresources ]; then
-	xrdb -merge $sysresources
-fi
-
-if [ -f $sysmodmap ]; then
-	xmodmap $sysmodmap
-fi
-
-if [ -f "$userresources" ]; then
-	xrdb -merge "$userresources"
-fi
-
-if [ -f "$usermodmap" ]; then
-	xmodmap "$usermodmap"
-fi
+# Source key mappings
+[ -f $sysmodmap ] && xmodmap $sysmodmap
+[ -f "$usermodmap" ] && xmodmap "$usermodmap"
 
 # Execute everything in /etc/X11/xinit/xinitrc.d/*
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
