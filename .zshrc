@@ -7,13 +7,15 @@ ZSH_THEME="gallois"
 # Plugins to load (from ~/.oh-my-zsh/plugins)
 plugins=(git cp jump extract mvn gradle ant docker pip archlinux systemd)
 
-# User configuration
-
+##### User configuration
 
 # Set up path
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/bin"
 
-export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+if command -v ruby > /dev/null 2>&1; then
+	export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+fi
+
 export PATH="/opt/gradle/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -54,9 +56,6 @@ up() {
 export TZ='Europe/London'
 
 neofetch
-
-
-# Cleanup Downloads directory
 cleanup_downloads
 
 # Setup some Tmux panes
