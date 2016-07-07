@@ -81,7 +81,7 @@ Plugin 'rustushki/JavaImp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'othree/xml.vim'
 Plugin 'artur-shaik/vim-javacomplete2'
-Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
 call vundle#end()
 
 " If vundle was installed, install all other plugins too
@@ -148,22 +148,3 @@ let g:JavaImpPaths =
 	\ "$HOME/.m2/repositories," .
 	\ "$HOME/.gradle/caches/modules-2/files-2.1"
 
-"""""""""""""""""
-" PYTHON-MODE SETTINGS
-"""""""""""""""""
-
-" Add lint support
-let g:pymode_lint=1
-let g:pymode_lint_checker="pylint"
-let g:pymode_lint_write=1
-
-" Virtualenv support
-let g:pymode_virtualenv=1
-
-" Additional syntax highlighting
-let g:pymode_syntax=1
-let g:pymode_syntax_all=1
-let g:pymode_syntax_indent_errors=1
-let g:pymode_syntax_space_errors=1
-
-let g:pymode_folding=0
