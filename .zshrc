@@ -22,6 +22,10 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR='vim'
 
+# You may need to manually set your language environment
+export LANG=en_GB.UTF-8
+setxkbmap gb
+
 # Aliases
 alias open="xdg-open"
 alias tojson="python -m json.tool"
