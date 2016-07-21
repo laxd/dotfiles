@@ -43,7 +43,9 @@ tmux_create_if_no_exists() {
 }
 
 cleanup_downloads() {
-	find ~/Downloads -mtime +30 -exec rm -rf ~/Downloads/{} \;
+	if [ -d ~/Downloads ]; then
+		find ~/Downloads -mtime +30 -exec rm -rf ~/Downloads/{} \;
+	fi
 }
 up() {
 	if [[ "$#" < 1 ]] ; then
