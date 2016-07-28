@@ -41,7 +41,7 @@ bindsym $mod+Ctrl+l exec i3lock -i ~/.config/i3/lockimage.png -t
 # Take a screenshot
 bindsym --release Print exec --no-startup-id scrot -s
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+Shift+q kill
