@@ -22,10 +22,6 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR='vim'
 
-# You may need to manually set your language environment
-export LANG=en_GB.UTF-8
-setxkbmap gb
-
 # Aliases
 alias open="xdg-open"
 alias tojson="python -m json.tool"
@@ -43,19 +39,14 @@ tmux_create_if_no_exists() {
 }
 
 cleanup_downloads() {
-	if [ -d ~/Downloads ]; then
+	file=/tmp/cleanup.socket
+	last_run=$(date -r $file --iso-8601 2>/dev/null | sed 's/-//g' )
+	now=$(date --iso-8601 | sed 's/-//g')
+
+	if [ -d ~/Downloads ] && [[ $now -gt $last_run ]]; then
+		echo "Cleaning up downloads..."
 		find ~/Downloads -mtime +30 -exec rm -rf ~/Downloads/{} \;
-	fi
-}
-up() {
-	if [[ "$#" < 1 ]] ; then
-		cd ..
-	else
-		CDSTR=""
-		for i in {1..$1} ; do
-			CDSTR="../$CDSTR"
-		done
-		cd $CDSTR
+		touch $file
 	fi
 }
 
