@@ -12,3 +12,5 @@
 [profiles]
   [[default]]
     show_titlebar=false
+    background_darkness = 0.80
+    background_type = transparent
