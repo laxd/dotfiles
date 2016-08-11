@@ -9,7 +9,7 @@ is_installed() {
 }
 
 FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lockimage.png .config/neofetch/config .newsbeuter/urls )
-PACKAGES=( git tmux i3 newsbeuter )
+PACKAGES=( git tmux i3 newsbeuter terminator )
 AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
 
