@@ -8,7 +8,7 @@ is_installed() {
 	fi
 }
 
-FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls )
+FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
 AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
