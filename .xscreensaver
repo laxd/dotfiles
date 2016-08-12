@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.35 for lawrence on Fri Aug 12 09:55:38 2016.
+# Written by xscreensaver-demo 5.35 for lawrence on Fri Aug 12 14:19:16 2016.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:10:00
@@ -29,13 +29,13 @@ dpmsQuickOff:	False
 dpmsStandby:	2:00:00
 dpmsSuspend:	2:00:00
 dpmsOff:	4:00:00
-grabDesktopImages:  True
+grabDesktopImages:  False
 grabVideoFrames:    False
 chooseRandomImages: True
-imageDirectory:	~/.wallpapers/
+imageDirectory:	/home/lawrence/.wallpapers
 
-mode:		random
-selected:	-1
+mode:		one
+selected:	144
 
 textMode:	file
 textLiteral:	XScreenSaver
@@ -58,7 +58,7 @@ programs:								      \
 				qix -root				    \n\
 -				rocks -root				    \n\
 				rorschach -root				    \n\
-				decayscreen -root			    \n\
+				decayscreen -root -duration 600 -mode down  \n\
 				flame -root				    \n\
 				halo -root				    \n\
 				slidescreen -root			    \n\
@@ -188,7 +188,8 @@ programs:								      \
   GL: 				gleidescope -root			    \n\
   GL: 				glknots -root				    \n\
   GL: 				glmatrix -root				    \n\
-- GL: 				glslideshow -root			    \n\
+- GL: 				glslideshow -root -delay 34513 -duration      \
+				  300 -zoom 100 -fade 0			    \n\
   GL: 				hypertorus -root			    \n\
 - GL: 				jigglypuff -root			    \n\
 				metaballs -root				    \n\
