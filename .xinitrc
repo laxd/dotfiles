@@ -27,6 +27,9 @@ fi
 # Set background image
 feh --bg-scale ~/.wallpapers/pi.png
 
+# Set screensaver to run
+xscreensaver -nosplash &
+
 # Keep something as the default
 wm=${1:-i3}
 
