@@ -8,7 +8,7 @@ is_installed() {
 	fi
 }
 
-FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lockimage.png .config/neofetch/config .newsbeuter/urls )
+FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
 AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
@@ -89,7 +89,7 @@ echo "Pacaur installation complete, installing AUR packages..."
 pacaur -S ${AUR_PACKAGES[*]}
 
 echo "Setting up wallpapers etc"
-mkdir ~/.wallpapers
+mkdir -p ~/.wallpapers
 cp $DOTFILES/images/wallpapers/* ~/.wallpapers/
 
 echo Done!
