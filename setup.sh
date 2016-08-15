@@ -22,6 +22,12 @@ is_installed() {
 }
 
 install_from_aur() {
+	if ! is_installed pacaur; then
+		echo "Pacaur must be installed to install from AUR"
+		echo "Please run 'setup.sh pacaur' first, then re-run this"
+		exit 1
+	fi
+
 	# Check it's already installed
 	if ! is_installed $1; then
 		curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=$1
