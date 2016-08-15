@@ -13,19 +13,10 @@ usage() {
 	echo " -h Print this help text"
 }
 
-is_installed() {
-	if [[ -z $(pacman -Qs ^$1$) ]]; then
+install_from_aur_manually() {
+	
+	if ! confirm "Install $1 from AUR?"; then
 		return 1
-	else
-		return 0
-	fi
-}
-
-install_from_aur() {
-	if ! is_installed pacaur; then
-		echo "Pacaur must be installed to install from AUR"
-		echo "Please run 'setup.sh pacaur' first, then re-run this"
-		exit 1
 	fi
 
 	# Check it's already installed
@@ -34,7 +25,75 @@ install_from_aur() {
 		makepkg PKGBUILD --skippgpcheck
 		sudo pacman -U $1*.xz --noconfirm
 	else 
-		echo "$1 is already installed, skipping..."
+		echo "$1 is already installed"
+	fi
+
+	return 0
+}
+
+install_pacaur() {
+	echo "Installing pacaur"
+
+	CURRENT_DIR=`pwd`
+
+	mkdir -p /tmp/pacaur_install
+	cd /tmp/pacaur_install
+
+
+	# Git is required for aur installs
+	if ! is_installed git; then
+		sudo pacman -S git
+	fi
+
+	# Install cower
+	if ! install_from_aur_manually cower; then
+		echo "Cower must be installed for pacuar, exiting..."
+
+		cd $CURRENT_DIR
+		rm -r /tmp/pacaur_install
+		exit 1
+	fi
+
+	# Install pacaur
+	install_from_aur_manually pacaur
+
+	cd $CURRENT_DIR
+	rm -r /tmp/pacaur_install
+
+	echo "Completed installing pacaur"
+}
+
+is_installed() {
+	if [[ -z $(pacman -Qs ^$1$) ]]; then
+		return 1
+	else
+		return 0
+	fi
+}
+
+install_aur_packages() {
+	if ! is_installed pacaur; then
+		echo "Pacaur must be installed to install from AUR"
+		echo "Please run 'setup.sh pacaur' first, then re-run this"
+		exit 1
+	fi
+
+	echo ""
+	echo "Attempting to install required packages from AUR:"
+
+	TO_INSTALL=()
+
+	for p in ${AUR_PACKAGES[@]}; do
+		if is_installed $p; then
+			echo "$p already installed"
+		else
+			echo $p
+			TO_INSTALL+=($p)
+		fi
+	done
+
+	if [ ${#TO_INSTALL[@]} -gt 0 ]; then
+		pacaur -S ${TO_INSTALL[*]}
 	fi
 }
 
@@ -54,19 +113,13 @@ confirm() {
 
 }
 
-ASK_CONFIRM=0
-FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
-PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
-AUR_PACKAGES=( neofetch )
-DOTFILES=$(pwd)
-
 symlink_dotfiles() {
-	echo "Setting up symlinks for dotfiles..."
+	echo "Setting up symlinks for dotfiles"
 	for f in ${FILES[@]}; do
 		if [[ ! -e ~/$f ]]; then
-			if confirm "Symlink $DOTFILES/$f to ~f?"; then
+			if confirm "Symlink $DOTFILES/$f to ~/$f?"; then
 
-				echo Creating symlink for $f
+				echo Creating symlink for ~/$f
 
 				# Create the parent directory if it doesn't exist
 				mkdir -p $(dirname ~/$f)
@@ -107,42 +160,17 @@ install_packages() {
 	fi
 }
 
-install_pacaur() {
-	echo "Installing pacaur"
-
-	CURRENT_DIR=`pwd`
-
-	mkdir -p /tmp/pacaur_install
-	cd /tmp/pacaur_install
-
-
-	# Git is required for aur installs
-	if ! is_installed git; then
-		sudo pacman -S git
-	fi
-
-
-	# Install cower
-	install_from_aur cower
-
-	# Install pacaur
-	install_from_aur pacaur
-
-	cd $CURRENT_DIR
-	rm -r /tmp/pacaur_install
-
-	echo "Completed installing pacaur"
-}
-
-install_aur_packages() {
-	pacaur -S ${AUR_PACKAGES[*]}
-}
-
 setup_wallpapers() {
 	echo "Setting up wallpapers etc"
 	mkdir -p ~/.wallpapers
 	cp $DOTFILES/images/wallpapers/* ~/.wallpapers/
 }
+
+ASK_CONFIRM=0
+FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
+PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
+AUR_PACKAGES=( neofetch )
+DOTFILES=$(pwd)
 
 while getopts ":ah" opt; do
 	case $opt in
