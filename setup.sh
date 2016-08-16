@@ -148,8 +148,31 @@ symlink_dotfiles() {
 setup_mutt() {
 	mkdir -p ~/.mutt/tmp
 
+	log "Setting up mutt"
+
 	if [ ! -f ~/.mutt/imapconfig ]; then
-		cp $DOTFILES/exampleimapconfig ~/.mutt/imapconfig
+		read -p "Mail Domain: " -r
+		DOMAIN=$REPLY
+
+		read -p "Username: " -r
+		USERNAME=$REPLY
+
+		read -p "Password: " -r
+		PASSWORD=$REPLY
+
+		read -p "Real Name: " -r
+		NAME=$REPLY
+
+		read -p "Sent Folder [Sent]: " -r
+		SENT=${REPLY:-Sent}
+
+		read -p "Drafts Folder [Drafts]: " -r
+		DRAFTS=${REPLY:-Drafts}
+
+		read -p "Trash folder [Trash]: " -r
+		TRASH=${REPLY:-Trash}
+
+		sed -e "s/\$DOMAIN/$DOMAIN/g; s/\$USERNAME/$USERNAME/g; s/\$PASSWORD/$PASSWORD/g; s/\$NAME/$NAME/g; s/\$SENT/$SENT/g; s/\$DRAFTS/$DRAFTS/g; s/\$TRASH/$TRASH/g" $DOTFILES/exampleimapconfig > ~/.mutt/imapconfig
 		echo "Don't forget to update ~/.mutt/imapconfig with your email settings!"
 	fi
 }
