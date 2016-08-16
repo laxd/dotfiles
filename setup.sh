@@ -1,7 +1,8 @@
 #! /bin/bash
 
 usage() {
-	echo "$0 [-acdfhimpvw]"
+	echo "$0 [-Aacdfhimpvw]"
+	echo " -A perform a full setup of ALL options"
 	echo " -a install required AUR packages"
 	echo " -c Ask for confirmation before changing anything"
 	echo " -d symlink dotfiles"
@@ -15,19 +16,11 @@ usage() {
 }
 
 is_verbose() {
-	if [[ 1 -eq $VERBOSE ]]; then
-		return 0
-	else
-		return 1
-	fi
+	return $VERBOSE
 }
 
 is_force() {
-	if [[ 1 -eq $FORCE ]]; then
-		return 0
-	else
-		return 1
-	fi
+	return $FORCE
 }
 
 log() {
@@ -137,7 +130,6 @@ confirm() {
 	fi
 
 	return 1
-
 }
 
 symlink_dotfiles() {
@@ -236,9 +228,9 @@ setup_wallpapers() {
 	fi
 }
 
-ASK_CONFIRM=0
-VERBOSE=0
-FORCE=0
+ASK_CONFIRM=1
+VERBOSE=1
+FORCE=1
 FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
 AUR_PACKAGES=( neofetch )
@@ -251,19 +243,27 @@ DO_AUR_PACKAGES=1
 DO_SETUP_WALLPAPAERS=1
 DO_INSTALL_PACAUR=1
 
-while getopts ":acdfhimpvw" opt; do
+while getopts ":Aacdfhimpvw" opt; do
 	case $opt in
+		A)
+			DO_AUR_PACKAGES=0
+			DO_DOTFILES=0
+			DO_INSTALL_PACAUR=0
+			DO_MUTT=0
+			DO_PACKAGES=0
+			DO_SETUP_WALLPAPERS=0
+			;;
 		a)
 			DO_AUR_PACKAGES=0
 			;;
 		c)
-			ASK_CONFIRM=1
+			ASK_CONFIRM=0
 			;;
 		d)
 			DO_DOTFILES=0
 			;;
 		f)
-			FORCE=1
+			FORCE=0
 			;;
 		h)
 			usage
@@ -278,7 +278,7 @@ while getopts ":acdfhimpvw" opt; do
 			DO_PACKAGES=0
 			;;
 		v)
-			VERBOSE=1
+			VERBOSE=0
 			;;
 		w)
 			DO_SETUP_WALLPAPERS=0
