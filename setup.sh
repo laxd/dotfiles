@@ -1,16 +1,30 @@
 #! /bin/bash
 
 usage() {
-	echo "$0 [dotfiles|mutt|packages|aur_packages|wallpapers|pacaur] [-a]"
-	echo "    dotfiles - Create symlinks for all dotfiles and exit"
-	echo "    mutt - Setup mutt"
-	echo "    packages - Install all required packages and exit"
-	echo "    aur_packages - Install cower and pacaur (if required), then install all required AUR packages and exit"
-	echo "    wallpapers - Install wallpapers to ~/.wallpapers"
-	echo "    pacaur - Install pacaur (pre-requisite for aur_packages)"
-	echo ""
-	echo " -a Ask for confirmation before changing anything. I.e. before each dotfile is linked, before any packages are downloaded etc."
+	echo "$0 [-acdhimpvw]"
+	echo " -a install required AUR packages"
+	echo " -c Ask for confirmation before changing anything"
+	echo " -d symlink dotfiles"
 	echo " -h Print this help text"
+	echo " -i install pacaur"
+	echo " -m setup mutt"
+	echo " -p install required packages"
+	echo " -v verbose"
+	echo " -w copy wallpapers"
+}
+
+is_verbose() {
+	if [[ 1 -eq $VERBOSE ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+log() {
+	if is_verbose; then
+		echo $*
+	fi
 }
 
 install_from_aur_manually() {
@@ -25,7 +39,7 @@ install_from_aur_manually() {
 		makepkg PKGBUILD --skippgpcheck
 		sudo pacman -U $1*.xz --noconfirm
 	else 
-		echo "$1 is already installed"
+		log "$1 is already installed"
 	fi
 
 	return 0
@@ -60,7 +74,7 @@ install_pacaur() {
 	cd $CURRENT_DIR
 	rm -r /tmp/pacaur_install
 
-	echo "Completed installing pacaur"
+	log "Completed installing pacaur"
 }
 
 is_installed() {
@@ -78,16 +92,16 @@ install_aur_packages() {
 		exit 1
 	fi
 
-	echo ""
-	echo "Attempting to install required packages from AUR:"
+	log ""
+	log "Attempting to install required packages from AUR:"
 
 	TO_INSTALL=()
 
 	for p in ${AUR_PACKAGES[@]}; do
 		if is_installed $p; then
-			echo "$p already installed"
+			log "$p already installed"
 		else
-			echo $p
+			log "Installing $p"
 			TO_INSTALL+=($p)
 		fi
 	done
@@ -119,14 +133,14 @@ symlink_dotfiles() {
 		if [[ ! -e ~/$f ]]; then
 			if confirm "Symlink $DOTFILES/$f to ~/$f?"; then
 
-				echo Creating symlink for ~/$f
+				log "Creating symlink for ~/$f"
 
 				# Create the parent directory if it doesn't exist
 				mkdir -p $(dirname ~/$f)
 				ln -s $DOTFILES/$f ~/$f
 			fi
 		else
-			echo "~/$f already exists, skipping..."
+			log "~/$f already exists, skipping..."
 		fi
 	done
 }
@@ -141,16 +155,16 @@ setup_mutt() {
 }
 
 install_packages() {
-	echo ""
-	echo "Attempting to install required packages:"
+	log ""
+	log "Attempting to install required packages:"
 
 	TO_INSTALL=()
 
 	for p in ${PACKAGES[@]}; do
 		if is_installed $p; then
-			echo "$p already installed"
+			log "$p already installed"
 		else
-			echo $p
+			log "Installing $p"
 			TO_INSTALL+=($p)
 		fi
 	done
@@ -161,35 +175,27 @@ install_packages() {
 }
 
 setup_wallpapers() {
-	echo "Setting up wallpapers etc"
+	log "Copying wallpapers..."
+
 	mkdir -p ~/.wallpapers
-	cp $DOTFILES/images/wallpapers/* ~/.wallpapers/
+
+	if is_verbose; then
+		for wp in $DOTFILES/images/wallpapers/*; do
+			wp=$(basename $wp)
+			log "Copying $DOTFILES/images/wallpapers/$wp to ~/.wallpapers/$wp"
+			cp $DOTFILES/images/wallpapers/$wp ~/.wallpapers/$wp
+		done
+	else
+		cp $DOTFILES/images/wallpapers/* ~/.wallpapers/
+	fi
 }
 
 ASK_CONFIRM=0
+VERBOSE=0
 FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
 AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
-
-while getopts ":ah" opt; do
-	case $opt in
-		a)
-			ASK_CONFIRM=1
-			;;
-		h)
-			usage
-			exit;;
-		\?)
-			echo "Invalid option : -$OPTARG"
-			;;
-	esac
-done
-
-shift $(($OPTIND -1))
-ARGUMENTS=$*
-
-[[ -z $ARGUMENTS ]] && ARGUMENTS="dotfiles mutt packages aur_packages wallpapers pacaur"
 
 DO_DOTFILES=1
 DO_MUTT=1
@@ -198,13 +204,39 @@ DO_AUR_PACKAGES=1
 DO_SETUP_WALLPAPAERS=1
 DO_INSTALL_PACAUR=1
 
-for arg in $ARGUMENTS; do
-	[[ $arg == "dotfiles" ]] && DO_DOTFILES=0
-	[[ $arg == "mutt" ]] && DO_MUTT=0
-	[[ $arg == "packages" ]] && DO_PACKAGES=0
-	[[ $arg == "aur_packages" ]] && DO_AUR_PACKAGES=0
-	[[ $arg == "wallpapers" ]] && DO_SETUP_WALLPAPERS=0
-	[[ $arg == "pacaur" ]] && DO_INSTALL_PACAUR=0
+while getopts ":acdhimpvw" opt; do
+	case $opt in
+		a)
+			DO_AUR_PACKAGES=0
+			;;
+		c)
+			ASK_CONFIRM=1
+			;;
+		d)
+			DO_DOTFILES=0
+			;;
+		h)
+			usage
+			exit;;
+		i)
+			DO_INSTALL_PACAUR=0
+			;;
+		m)
+			DO_MUTT=0
+			;;
+		p)
+			DO_PACKAGES=0
+			;;
+		v)
+			VERBOSE=1
+			;;
+		w)
+			DO_SETUP_WALLPAPERS=0
+			;;
+		\?)
+			echo "Invalid option : -$OPTARG"
+			;;
+	esac
 done
 
 [[ $DO_DOTFILES == 0 ]] && symlink_dotfiles
