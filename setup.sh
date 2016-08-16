@@ -1,10 +1,11 @@
 #! /bin/bash
 
 usage() {
-	echo "$0 [-acdhimpvw]"
+	echo "$0 [-acdfhimpvw]"
 	echo " -a install required AUR packages"
 	echo " -c Ask for confirmation before changing anything"
 	echo " -d symlink dotfiles"
+	echo " -f force - Overwrite files even if they exist - USE WITH CAUTION"
 	echo " -h Print this help text"
 	echo " -i install pacaur"
 	echo " -m setup mutt"
@@ -15,6 +16,14 @@ usage() {
 
 is_verbose() {
 	if [[ 1 -eq $VERBOSE ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+is_force() {
+	if [[ 1 -eq $FORCE ]]; then
 		return 0
 	else
 		return 1
@@ -34,7 +43,7 @@ install_from_aur_manually() {
 	fi
 
 	# Check it's already installed
-	if ! is_installed $1; then
+	if ! is_installed $1 || is_force; then
 		curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=$1
 		makepkg PKGBUILD --skippgpcheck
 		sudo pacman -U $1*.xz --noconfirm
@@ -56,7 +65,7 @@ install_pacaur() {
 
 	# Git is required for aur installs
 	if ! is_installed git; then
-		sudo pacman -S git
+		sudo pacman -S git --noconfirm
 	fi
 
 	# Install cower
@@ -97,17 +106,21 @@ install_aur_packages() {
 
 	TO_INSTALL=()
 
-	for p in ${AUR_PACKAGES[@]}; do
-		if is_installed $p; then
-			log "$p already installed"
-		else
-			log "Installing $p"
-			TO_INSTALL+=($p)
-		fi
-	done
+	if is_force; then
+		TO_INSTALL=${AUR_PACKAGES[@]}
+	else
+		for p in ${AUR_PACKAGES[@]}; do
+			if is_installed $p; then
+				log "$p already installed"
+			else
+				log "Installing $p"
+				TO_INSTALL+=($p)
+			fi
+		done
+	fi
 
 	if [ ${#TO_INSTALL[@]} -gt 0 ]; then
-		pacaur -S ${TO_INSTALL[*]}
+		pacaur -S ${TO_INSTALL[*]} --noconfirm
 	fi
 }
 
@@ -146,11 +159,14 @@ symlink_dotfiles() {
 }
 
 setup_mutt() {
+	local MUTT_CONFIG_SOURCE=$DOTFILES/exampleimapconfig
+	local MUTT_CONFIG=~/.mutt/imapconfig
+
 	mkdir -p ~/.mutt/tmp
 
 	log "Setting up mutt"
 
-	if [ ! -f ~/.mutt/imapconfig ]; then
+	if [ ! -f $MUTT_CONFIG ]; then
 		read -p "Mail Domain: " -r
 		DOMAIN=$REPLY
 
@@ -172,8 +188,11 @@ setup_mutt() {
 		read -p "Trash folder [Trash]: " -r
 		TRASH=${REPLY:-Trash}
 
-		sed -e "s/\$DOMAIN/$DOMAIN/g; s/\$USERNAME/$USERNAME/g; s/\$PASSWORD/$PASSWORD/g; s/\$NAME/$NAME/g; s/\$SENT/$SENT/g; s/\$DRAFTS/$DRAFTS/g; s/\$TRASH/$TRASH/g" $DOTFILES/exampleimapconfig > ~/.mutt/imapconfig
-		echo "Don't forget to update ~/.mutt/imapconfig with your email settings!"
+		sed -e "s/\$DOMAIN/$DOMAIN/g; s/\$USERNAME/$USERNAME/g; s/\$PASSWORD/$PASSWORD/g; s/\$NAME/$NAME/g; s/\$SENT/$SENT/g; s/\$DRAFTS/$DRAFTS/g; s/\$TRASH/$TRASH/g" $MUTT_CONFIG_SOURCE > $MUTT_CONFIG
+
+		chmod 0700 $MUTT_CONFIG
+	else
+		log "$MUTT_CONFIG already exists! Remove this file first to enable mutt setup"
 	fi
 }
 
@@ -183,17 +202,21 @@ install_packages() {
 
 	TO_INSTALL=()
 
-	for p in ${PACKAGES[@]}; do
-		if is_installed $p; then
-			log "$p already installed"
-		else
-			log "Installing $p"
-			TO_INSTALL+=($p)
-		fi
-	done
+	if is_force; then
+		TO_INSTALL=${PACKAGES[@]}
+	else
+		for p in ${PACKAGES[@]}; do
+			if is_installed $p; then
+				log "$p already installed"
+			else
+				log "Installing $p"
+				TO_INSTALL+=($p)
+			fi
+		done
+	fi
 
 	if [ ${#TO_INSTALL[@]} -gt 0 ]; then
-		sudo pacman -S ${TO_INSTALL[*]}
+		sudo pacman -S ${TO_INSTALL[*]} --noconfirm
 	fi
 }
 
@@ -215,6 +238,7 @@ setup_wallpapers() {
 
 ASK_CONFIRM=0
 VERBOSE=0
+FORCE=0
 FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh )
 AUR_PACKAGES=( neofetch )
@@ -227,7 +251,7 @@ DO_AUR_PACKAGES=1
 DO_SETUP_WALLPAPAERS=1
 DO_INSTALL_PACAUR=1
 
-while getopts ":acdhimpvw" opt; do
+while getopts ":acdfhimpvw" opt; do
 	case $opt in
 		a)
 			DO_AUR_PACKAGES=0
@@ -237,6 +261,9 @@ while getopts ":acdhimpvw" opt; do
 			;;
 		d)
 			DO_DOTFILES=0
+			;;
+		f)
+			FORCE=1
 			;;
 		h)
 			usage
@@ -258,7 +285,7 @@ while getopts ":acdhimpvw" opt; do
 			;;
 		\?)
 			echo "Invalid option : -$OPTARG"
-			;;
+			exit 2;;
 	esac
 done
 
