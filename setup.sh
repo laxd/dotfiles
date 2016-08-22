@@ -217,15 +217,13 @@ setup_wallpapers() {
 
 	mkdir -p ~/.wallpapers
 
-	if is_verbose; then
-		for wp in $DOTFILES/images/wallpapers/*; do
-			wp=$(basename $wp)
-			log "Copying $DOTFILES/images/wallpapers/$wp to ~/.wallpapers/$wp"
-			cp $DOTFILES/images/wallpapers/$wp ~/.wallpapers/$wp
-		done
-	else
-		cp $DOTFILES/images/wallpapers/* ~/.wallpapers/
-	fi
+	for wp in $DOTFILES/images/wallpapers/*; do
+		wp=$(basename $wp)
+		if is_verbose; then
+			log "Linking $DOTFILES/images/wallpapers/$wp to ~/.wallpapers/$wp"
+		fi
+		ln -s $DOTFILES/images/wallpapers/$wp ~/.wallpapers/$wp
+	done
 }
 
 ASK_CONFIRM=1
