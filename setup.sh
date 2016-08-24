@@ -182,6 +182,7 @@ setup_mutt() {
 
 		sed -e "s/\$DOMAIN/$DOMAIN/g; s/\$USERNAME/$USERNAME/g; s/\$PASSWORD/$PASSWORD/g; s/\$NAME/$NAME/g; s/\$SENT/$SENT/g; s/\$DRAFTS/$DRAFTS/g; s/\$TRASH/$TRASH/g" $MUTT_CONFIG_SOURCE > $MUTT_CONFIG
 
+		# Remove read permissions for everyone else
 		chmod 0700 $MUTT_CONFIG
 	else
 		log "$MUTT_CONFIG already exists! Remove this file first to enable mutt setup"
