@@ -30,6 +30,9 @@ feh --bg-scale ~/.wallpapers/arch.png
 # Set screensaver to run
 xscreensaver -nosplash &
 
+# Re-map caps lock
+setxkbmap -option caps:super
+
 # Keep something as the default
 wm=${1:-i3}
 
