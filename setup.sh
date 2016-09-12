@@ -231,7 +231,7 @@ ASK_CONFIRM=1
 VERBOSE=1
 FORCE=1
 FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
-PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac )
+PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac sysstat )
 AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
 
