@@ -19,7 +19,7 @@ set folder="imaps://$my_imap_domain:993/"
 set spoolfile="+INBOX"
 set postponed="+$my_drafts_folder_name"
 set record="+$my_sent_folder_name"
-#set trash="+$my_trash_folder_name"
+set trash="+$my_trash_folder_name"
 mailboxes
 
 set imap_check_subscribed="yes"

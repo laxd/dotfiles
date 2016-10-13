@@ -1,5 +1,9 @@
 #! /bin/bash
 
+FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .config/terminator/config )
+PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac sysstat )
+AUR_PACKAGES=( neofetch neomutt py3status )
+
 usage() {
 	echo "$0 [-Aacdfhimpvw]"
 	echo " -A perform a full setup of ALL options"
@@ -230,9 +234,6 @@ setup_wallpapers() {
 ASK_CONFIRM=1
 VERBOSE=1
 FORCE=1
-FILES=( .zshrc .xinitrc .Xmodmap .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/neofetch/config .newsbeuter/urls .xscreensaver )
-PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac sysstat )
-AUR_PACKAGES=( neofetch )
 DOTFILES=$(pwd)
 
 DO_DOTFILES=1
