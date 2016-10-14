@@ -47,3 +47,11 @@ set message_cachedir="~/.mutt/message_cache"
 set header_cache="~/.mutt/header_cache"
 # IMPORTANT - Make sure this directory exists!
 set tmpdir="~/.mutt/tmp"
+
+# General config
+
+# Allow viewing of html emails
+set mailcap_path="~/.mutt/mailcap"
+
+auto_view text/html
+alternative_order text/plain text/enriched text/html
