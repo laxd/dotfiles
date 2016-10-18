@@ -22,7 +22,21 @@ alias tojson="python -m json.tool"
 
 # Functions
 mvln() {
-	mkdir -p $2 && rmdir $2 && mv $1 $2 && ln -s $2 $1
+	mkdir -p $2 && rmdir $2 && mv $1 $2 && ln -s $1 $2
+}
+
+docker_cleanup() {
+	docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm -v
+}
+
+docker_cleanup_images() {
+	docker images | grep "<none>" | awk '{print $3}' | xargs docker rmi
+}
+
+docker_ps() {
+	WIDTH=`tput cols`
+	NAMES_WIDTH=$(($WIDTH - 20 - 10))
+	docker ps -a --format="table {{printf \"%.20s\" .Names}}\t{{printf \"%.${NAMES_WIDTH}s\" .Image}}\t{{printf \"%.10s\" .Status}}"
 }
 
 cleanup_downloads() {
