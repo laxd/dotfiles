@@ -18,6 +18,7 @@ printinfo () {
     info title
     info underline
 
+    info "Model" model
     info "OS" distro
     info "Kernel" kernel
     info "Uptime" uptime
@@ -29,23 +30,24 @@ printinfo () {
     info "WM Theme" wmtheme
     info "Theme" theme
     info "Icons" icons
-    info "Font" font
+    info "Terminal" term
+    info "Terminal Font" termfont
     info "CPU" cpu
     info "GPU" gpu
     info "Memory" memory
 
+    # info "CPU Usage" cpu_usage
     # info "Disk" disk
     # info "Battery" battery
-    info "Local IP" localip
-    info "Public IP" publicip
+    # info "Font" font
+    # info "Song" song
+    # info "Local IP" localip
+    # info "Public IP" publicip
     # info "Users" users
     # info "Birthday" birthday
-    # info "Song" song
 
     info linebreak
     info cols
-    info linebreak
-    info linebreak
 }
 
 
@@ -57,6 +59,10 @@ kernel_shorthand="on"
 
 
 # Distro
+
+# Shorten the output of distro (tiny, on, off)
+# NOTE: This is only possible on Linux
+distro_shorthand="off"
 
 # Mac OS X hide/show build version
 # --osx_buildversion on/off
@@ -97,10 +103,14 @@ shell_version="off"
 # scaling_current, scaling_min, scaling_max
 speed_type="max"
 
-# CPU Display
-# Set shorthand setting and progress bar setting
-# --cpu_display (name, speed, tiny, on, off) (bar, infobar, barinfo, off)
+# CPU Shorthand
+# Set shorthand setting
+# --cpu_shorthand name, speed, tiny, on, off
 cpu_shorthand="off"
+
+# CPU Usage display
+# Set CPU usage display setting
+# --cpu_display bar, infobar, barinfo, off
 cpu_display="off"
 
 # CPU Cores
@@ -114,6 +124,10 @@ cpu_cores="on"
 # Shorten output of the getgpu funcion
 # --gpu_shorthand on/off/tiny
 gpu_shorthand="on"
+
+# Enable/Disable GPU Brand
+# --gpu_brand on/off
+gpu_brand="on"
 
 # Resolution
 
@@ -185,22 +199,6 @@ birthday_time="on"
 birthday_format="+%a %d %b %Y %l:%M %p"
 
 
-# Color Blocks
-
-# Color block range
-# --block_range start end
-start=0
-end=7
-
-# Toggle color blocks
-# --color_blocks on/off
-color_blocks="on"
-
-# Color block width
-# --color_block_width num
-block_width=3
-
-
 # }}}
 
 # Text Colors {{{
@@ -221,10 +219,6 @@ colors=(distro)
 # Text Options {{{
 
 
-# Toggle line wrapping
-# --line_wrap on/off
-line_wrap="off"
-
 # Toggle bold text
 # --bold on/off
 bold="on"
@@ -237,11 +231,28 @@ underline_enabled="on"
 # --underline_char char
 underline_char="-"
 
-# Prompt height
-# You should only have to change this if your
-# prompt is greater than 2 lines high.
-# --prompt_height num
-prompt_height=1
+
+# }}}
+
+# Color Blocks {{{
+
+
+# Color block range
+# --block_range start end
+start=0
+end=7
+
+# Toggle color blocks
+# --color_blocks on/off
+color_blocks="on"
+
+# Color block width in spaces
+# --block_width num
+block_width=2
+
+# Color block height in lines
+# --block_height num
+block_height=1
 
 
 # }}}
@@ -254,7 +265,7 @@ prompt_height=1
 progress_char_elapsed="-"
 progress_char_total="="
 
-# Progress vorder
+# Progress border
 # --progress_border on/off
 progress_border="on"
 
@@ -291,7 +302,7 @@ disk_display="off"
 
 # Image Source
 # --image wall, ascii, /path/to/img, /path/to/dir/, off
-image="wall"
+image="ascii"
 
 # Thumbnail directory
 thumbnail_dir="$HOME/.cache/thumbnails/neofetch"
@@ -317,7 +328,7 @@ crop_offset="center"
 
 # Image size
 # The image is half the terminal width by default.
-# --size auto, 00px, 00%
+# --size auto, 00px, 00%, none
 image_size="auto"
 
 # Right gap between image and text
@@ -342,6 +353,11 @@ xoffset=0
 # --ascii 'distro', path/to/ascii
 ascii="distro"
 
+# Ascii distro
+# Which distro's ascii art to display.
+# --ascii_distro 'auto', 'distro_name'
+ascii_distro="auto"
+
 # Ascii colors
 # When this is set to distro it will use your
 # ditro's colors to color the ascii.
@@ -357,6 +373,12 @@ ascii_colors=(distro)
 # will make neofetch use the small logo.
 # --ascii_logo_size small, normal
 ascii_logo_size="normal"
+
+# Bold ascii logo
+# Whether or not to bold the ascii logo.
+# --ascii_bold on/off
+ascii_bold="off"
+
 
 # }}}
 
@@ -379,16 +401,18 @@ scrot_dir="$HOME/Pictures/"
 # Scrot filename
 # What to name the screenshots
 # --scrot_name str
-scrot_name="neofetch-$(date +%F-%T).png"
+scrot_name="neofetch-$(date +%F-%I-%M-%S-${RANDOM}).png"
 
+# Image upload host
+# Where to upload the image.
+# Possible values: imgur, teknik
+image_host="imgur"
 
-# }}}
+# Imgur api key
+# This is an api key for neofetch, you can sign up for your own
+# here: http://api.imgur.com/oauth2/addclient
+imgur_client_id="0e8b44d15e9fc95"
 
-# Stdout options {{{
-
-# Separator for stdout mode
-# --stdout_separator string
-stdout_separator="  "
 
 # }}}
 
