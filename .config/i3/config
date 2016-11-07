@@ -29,6 +29,17 @@ font pango:monospace 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Disable title bar
+hide_edge_borders none
+for_window [class="^.*"] border pixel 1
+new_window none
+
+# Lock
+bindsym $mod+Ctrl+l exec $HOME/.config/i3/lock.sh
+
+# Take a screenshot
+bindsym --release Print exec --no-startup-id scrot -s
+
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
@@ -149,10 +160,15 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Passthrough mode disables all other keybinds except 
+# an escape keybind. Useful for nesting i3 sessions
+# in a VNC for example.
 mode "passthrough" {
         bindsym $mod+Shift+Escape mode "default"
 }
 
+# Same keybind to get in passthrough as to get out
+# for simplicity
 bindsym $mod+Shift+Escape mode "passthrough"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
