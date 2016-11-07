@@ -55,5 +55,25 @@ exec_in_background() {
 	($1 &) &> /dev/null
 }
 
+tmux_create_and_attach() {
+	SESSION_NAME=$1
+	if [[ $2 ]]; then
+		COMMAND=$2
+	else
+		COMMAND="cd"
+	fi
+
+	echo "Command is $COMMAND"
+
+	if [[ ! `tmux list-sessions 2>/dev/null | cut -f1 -d: | grep ^$1$` ]]; then
+		echo "Creating session $SESSION_NAME"
+		tmux new -d -s $SESSION_NAME $COMMAND
+	fi
+
+	echo "Attaching to $SESSION_NAME"
+
+	tmux attach -t $SESSION_NAME
+}
+
 exec_in_background cleanup_downloads
 neofetch
