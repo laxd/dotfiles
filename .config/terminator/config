@@ -11,10 +11,12 @@
 [plugins]
 [profiles]
   [[default]]
+    background_darkness = 0.8
+    background_image = None
+    background_type = transparent
     custom_command = zsh
     font = Terminus 8
-    show_titlebar=false
-    background_darkness = 0.80
-    background_type = transparent
+    scrollback_infinite = True
+    show_titlebar = False
     use_custom_command = True
     use_system_font = False
