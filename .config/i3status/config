@@ -11,26 +11,21 @@ general {
         interval = 5
 }
 
+order += "volume_status"
 order += "backlight"
-order += "online_status"
-order += "wireless _first_"
-order += "ethernet _first_"
-order += "battery 0"
+order += "net_iplist"
+order += "battery_level"
 order += "tztime local"
 
-wireless _first_ {
-        format_up = "W: %ip"
-        format_down = "W: down"
+net_iplist {
+    format = '{format_iface}'
+    format_iface = '{ip4}'
+    iface_blacklist = []
+    ip_blacklist= ['127.*', '::1', '172.17.0.1']
 }
 
-ethernet _first_ {
-        # if you use %speed, i3status requires root privileges
-        format_up = "E: %ip"
-        format_down = "E: down"
-}
-
-battery 0 {
-        format = "%percentage"
+battery_level {
+        format = "{icon} {percent}%"
 }
 
 tztime local {
