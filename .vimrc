@@ -1,5 +1,6 @@
 """"""""""""""""""
-" GENERAL SETTINGS """"""""""""""""""
+" GENERAL SETTINGS 
+""""""""""""""""""
 " Set line number for current line
 set number
 
@@ -14,9 +15,6 @@ syntax on
 
 " Map w!! to force save (i.e. opened without sudo)
 cmap w!! w !sudo tee > /dev/null %
-
-" Save and run tests
-map <F5> :w<CR>:make test<CR>
 
 " Remove highlighting with enter
 nnoremap <CR> :noh<CR><CR>:<BACKSPACE>
@@ -43,10 +41,9 @@ set splitright
 " TAB SETTINGS
 """"""""""""""""""
 
-set shiftwidth=2
-set tabstop=2
-set list
-set listchars=tab:\|\ 
+set expandtab
+set shiftwidth=4
+set tabstop=4
 
 """"""""""""""""""
 " PLUGIN SETTINGS
@@ -71,16 +68,7 @@ set rtp+=~/.vim/bundle/vundle/
 
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'honza/vim-snippets.git'
-Plugin 'Raimondi/delimitMate'
-Plugin 'airblade/vim-rooter'
-Plugin 'tfnico/vim-gradle'
 Plugin 'rustushki/JavaImp.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'othree/xml.vim'
-Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'davidhalter/jedi-vim'
 call vundle#end()
 
@@ -94,57 +82,23 @@ endif
 filetype plugin indent on
 
 """"""""""""""""""
-" NERDTREE SETTINGS
+" NETRW SETTINGS
 """"""""""""""""""
 
-" Open NERDTree when vim is opened...
-autocmd vimenter * NERDTree
+" Remove banner
+let g:netwr_banner = 0
+" Set netrw size to 25%
+let g:netrw_winsize = 25
+" Vertical split on choosing file
+let g:netrw_browse_split = 2
 
-" But make the focus the opened file (If there is one)
-autocmd vimenter * if argc() != 0 | wincmd l | endif
-
-" Close NERDTree when it is the last open split
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif 
-
-" Allow us to update NERDTree when we open a new file
-map <leader>n :NERDTreeFind<CR>l<CR>
-
-" Map Ctrl+n to open NERDTree window
-map <C-n> :NERDTreeToggle<CR>
-
-""""""""""""""""""
-" ULTISNIPS SETTINGS
-""""""""""""""""""
-
-" Trigger Configuration
-let g:UltiSnipsExpandTrigger="<C-SPACE>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-""""""""""""""""""
-" CTRLP SETTINGS
-""""""""""""""""""
-
-let g:ctrlp_map='<leader>t'
-
-" Ignore build/target directories
-set wildignore+=*/build/**
-set wildignore+=*/target/**
-
-" And don't do any caching
-let g:ctrlp_use_caching=0
+" Map Ctrl+n to open netrw window
+map <C-n> :Explore<CR>
 
 """"""""""""""""""
 " JAVAIMP SETTINGS
 """"""""""""""""""
 
-" ONLY to be used with vim-rooter
-" (Not working yet...)
-" let projectRoot = s:FindRootDirectory()
-" Alternative that isn't as good
-"let projectRoot = getcwd()
-
 let g:JavaImpPaths = 
 	\ "$HOME/.m2/repositories," .
 	\ "$HOME/.gradle/caches/modules-2/files-2.1"
-
