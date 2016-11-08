@@ -21,7 +21,8 @@ net_iplist {
     format = '{format_iface}'
     format_iface = '{ip4}'
     iface_blacklist = []
-    ip_blacklist= ['127.*', '::1', '172.17.0.1']
+    # Ignore 172.* for docker
+    ip_blacklist= ['127.*', '::1', '172.*']
 }
 
 battery_level {
