@@ -1,5 +1,31 @@
 #!/bin/bash
-scrot /tmp/screenshot.png
-ffmpeg -loglevel quiet -y -i /tmp/screenshot.png -vf "gblur=sigma=20" /tmp/screenshot_blur.png
-i3lock -i /tmp/screenshot_blur.png
-rm /tmp/screenshot.png /tmp/screenshot_blur.png
+LOCK_SCREEN=/tmp/screenshot.png
+ICON=$HOME/.config/i3/lock.png
+
+scrot $LOCK_SCREEN
+
+if [[ -f $ICON ]]
+then
+    # lockscreen image info
+    R=$(file $ICON | grep -o '[0-9]* x [0-9]*')
+    ICON_X=$(echo $R | cut -d' ' -f 1)
+    ICON_Y=$(echo $R | cut -d' ' -f 3)
+
+    SCREENS=$(xdpyinfo -ext XINERAMA | sed '/^  head #/!d;s///' | cut -d: -f2 | tr -d " \t")
+
+    LOCKS=""
+    for SCREEN in $SCREENS
+    do
+        IFS='x@,' read X Y dX dY <<< $SCREEN
+
+        PX=$(($dX + $X/2 - $ICON_X/2))
+        PY=$(($dY + $Y/2 - $ICON_Y/2))
+
+        LOCKS="$LOCKS $ICON -geometry +$PX+$PY -composite"
+    done
+    
+    convert $LOCK_SCREEN -scale 10% -scale 1000% $LOCKS -matte $LOCK_SCREEN
+fi
+
+i3lock -i $LOCK_SCREEN
+rm $LOCK_SCREEN
