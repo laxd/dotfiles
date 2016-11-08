@@ -20,8 +20,8 @@ order += "tztime local"
 net_iplist {
     format = '{format_iface}'
     format_iface = '{ip4}'
-    iface_blacklist = []
-    ip_blacklist= ['127.*', '::1', '172.17.0.1']
+    iface_blacklist = ['lo', 'docker*']
+    ip_blacklist= ['127.*', '::1']
 }
 
 battery_level {
@@ -30,9 +30,5 @@ battery_level {
 
 tztime local {
         format = "%Y-%m-%d %H:%M:%S"
-}
-
-load {
-        format = "%1min"
 }
 
