@@ -27,8 +27,8 @@ fi
 # Set background image
 feh --randomize --bg-scale ~/.wallpapers/*
 
-# Set screensaver to run
-xscreensaver -nosplash &
+# Set screen locker to run
+xautolock -time 15 -locker "$HOME/.config/i3/lock.sh -p" &
 
 # Re-map caps lock
 setxkbmap -option caps:super
