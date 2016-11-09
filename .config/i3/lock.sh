@@ -11,20 +11,23 @@ then
     ICON_X=$(echo $R | cut -d' ' -f 1)
     ICON_Y=$(echo $R | cut -d' ' -f 3)
 
-    SCREENS=$(xdpyinfo -ext XINERAMA | sed '/^  head #/!d;s///' | cut -d: -f2 | tr -d " \t")
+    SCREENS=$(xdpyinfo -ext XINERAMA | sed -n 's/^  head #[0-9]*: //p')
 
     LOCKS=""
+    IFS=$'\n'
     for SCREEN in $SCREENS
     do
-        IFS='x@,' read X Y dX dY <<< $SCREEN
+        IFS=' x@,' read X Y dX dY <<< $SCREEN
 
         PX=$(($dX + $X/2 - $ICON_X/2))
         PY=$(($dY + $Y/2 - $ICON_Y/2))
 
         LOCKS="$LOCKS $ICON -geometry +$PX+$PY -composite"
     done
-    
-    convert $LOCK_SCREEN -scale 10% -scale 1000% $LOCKS -matte $LOCK_SCREEN
+
+    unset IFS
+
+    convert $LOCK_SCREEN -scale 10% -scale 1000% $LOCKS $LOCK_SCREEN
 fi
 
 i3lock -i $LOCK_SCREEN
