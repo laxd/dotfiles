@@ -38,15 +38,14 @@ lock() {
 
             locks="$locks $icon -geometry +$PX+$PY -composite"
         done
+        # TODO: Add Text
 
-        # Add Text
-
-
-        unset IFS
-
-        lockscreen=$(mktemp --tmpdir tmpXXXXXXXXXX.png)
-        convert $image $transformation $locks $lockscreen
     fi
+
+    unset IFS
+
+    lockscreen=$(mktemp --tmpdir tmpXXXXXXXXXX.png)
+    convert $image $transformation $locks $lockscreen
 
     i3lock -i $lockscreen -t
     rm $lockscreen
