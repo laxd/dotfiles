@@ -1,6 +1,6 @@
 #! /bin/bash
 
-FILES=( .zshrc .xinitrc .Xmodmap .xprofile .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lock.sh .config/i3/lock.png .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .config/terminator/config .config/fontconfig/fonts.conf )
+FILES=( .zshrc .xinitrc .xprofile .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lock.sh .config/i3/lock.png .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .config/terminator/config .config/fontconfig/fonts.conf )
 PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac sysstat imagemagick )
 AUR_PACKAGES=( neofetch neomutt py3status )
 
@@ -139,17 +139,23 @@ confirm() {
 symlink_dotfiles() {
 	echo "Setting up symlinks for dotfiles"
 	for f in ${FILES[@]}; do
-		if [[ ! -e ~/$f ]]; then
-			if confirm "Symlink $DOTFILES/$f to ~/$f?"; then
+        if [[ -e $DOTFILES/$f ]] && ( is_force || [[ ! -e ~/$f ]] ); then
+			if is_force || confirm "Symlink $DOTFILES/$f to ~/$f?"; then
 
 				log "Creating symlink for ~/$f"
 
 				# Create the parent directory if it doesn't exist
 				mkdir -p $(dirname ~/$f)
+
+                # If we are forcing, delete target first
+                if is_force && [[ -e ~/$f ]]; then
+                    rm -rf ~/$f
+                fi
+
 				ln -s $DOTFILES/$f ~/$f
 			fi
 		else
-			log "~/$f already exists, skipping..."
+			log "~/$f already exists or doesn't exist in the repository, skipping..."
 		fi
 	done
 }
