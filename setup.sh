@@ -1,7 +1,7 @@
 #! /bin/bash
 
 FILES=( .zshrc .xinitrc .xprofile .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lock.sh .config/i3/lock.png .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .config/terminator/config .config/fontconfig/fonts.conf )
-PACKAGES=( git tmux i3 xscreensaver newsbeuter terminator scrot feh base-devel expac sysstat imagemagick xautolock )
+PACKAGES=( git tmux i3 xscreensaver newsbeuter rxvt-unicode scrot feh base-devel expac sysstat imagemagick xautolock )
 AUR_PACKAGES=( neofetch neomutt py3status )
 
 usage() {

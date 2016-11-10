@@ -1,0 +1,59 @@
+! General 
+urxvt*loginShell:         true
+urxvt*scrollBar:         false
+urxvt*secondaryScroll:    true
+urxvt*saveLines:         65535
+urxvt*cursorBlink:       false
+urxvt*urgentOnBell:       true
+
+! Extensions
+urxvt*perl-lib:        /usr/lib/urxvt/perl/
+urxvt*perl-ext-common: default,matcher,searchable-scrollback
+urxvt*urlLauncher:     /usr/bin/google-chrome
+urxvt*matcher.button:  1
+!  - catch ugly URLs
+urxvt.cutchars:        `()'*<>[]{|}"
+
+! Appearance
+urxvt*font: xft:inconsolata:pixelsize=10 
+!  - cursor
+urxvt*cursorColor: #DCDCCC
+!  - pseudo transparency
+urxvt*shading:    15
+urxvt*transparent:true
+
+! Color scheme
+urxvt.background:  #000000
+urxvt.foreground:  white
+! black
+urxvt*color0:      #000000
+! red
+urxvt*color1:      #e01010
+! green
+urxvt*color2:      #00AA00
+! yellow
+urxvt*color3:      #FFFF00
+! blue
+urxvt*color4:      #112037
+! purple
+urxvt*color5:      #A020F0
+! cyan
+urxvt*color6:      #5B5BC7
+! white
+urxvt*color7:      #fefefe
+! bright-black
+urxvt*color8:      #6a6a6a
+! bright-red
+urxvt*color9:      #FF5555
+! bright-green
+urxvt*color10:     #90EE90
+! bright-yellow
+urxvt*color11:     #ffff2f
+! bright-blue 
+urxvt*color12:     #5B5BC7
+! bright-purple
+urxvt*color13:     #e628ba
+! bright-cyan
+urxvt*color14:     #7D7DFB
+! bright-white
+urxvt*color15:     #ffffff
