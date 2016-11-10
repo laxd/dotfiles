@@ -22,7 +22,7 @@ alias tojson="python -m json.tool"
 
 # Functions
 mvln() {
-	mkdir -p $2 && rmdir $2 && mv $1 $2 && ln -s $1 $2
+	mkdir -p $2 && rmdir $2 && mv $1 $2 && ln -s $2 $1
 }
 
 docker_cleanup() {
