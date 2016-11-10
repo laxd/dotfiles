@@ -15,7 +15,7 @@
     background_image = None
     background_type = transparent
     custom_command = zsh
-    font = Terminus 8
+    font = Inconsolata 11
     scrollback_infinite = True
     show_titlebar = False
     use_custom_command = True
