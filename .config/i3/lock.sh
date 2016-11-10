@@ -16,7 +16,7 @@ lock() {
     if [[ -f $icon ]]
     then
         # get lockscreen image info
-        R=$(file $icon | grep -o '[0-9]* x [0-9]*')
+        R=$(file --dereference $icon | grep -o '[0-9]* x [0-9]*')
         icon_X=$(echo $R | cut -d' ' -f 1)
         icon_Y=$(echo $R | cut -d' ' -f 3)
 
@@ -44,11 +44,10 @@ lock() {
 
     unset IFS
 
-    lockscreen=$(mktemp --tmpdir tmpXXXXXXXXXX.png)
+    lockscreen=$(mktemp $dir/tmpXXXXXXXXXX.png)
     convert $image $transformation $locks $lockscreen
 
     i3lock -i $lockscreen -t
-    rm $lockscreen
 }
 
 usage() {
@@ -88,6 +87,11 @@ main() {
         esac
     done
 
+    dir=$(mktemp --tmpdir tmpXXXXXXXXXXX -d)
+    trap 'rm -rf "$dir"' EXIT
+
+    # image modification should only happen
+    # after all options have been set e.g. scale
     if [[ $f_pixelate -eq 1 ]]; then
         pixelate
     elif [[ $f_blur -eq 1 ]]; then
@@ -95,16 +99,11 @@ main() {
     fi
   
     if [[ -z $image ]]; then
-        image=$(mktemp --tmpdir tmpXXXXXXXXXX.png)
+        image=$(mktemp $dir/tmpXXXXXXXXXX.png)
         scrot $image
-        cleanup=true
     fi
 
     lock $image
-
-    if [[ $cleanup ]]; then
-        rm $image
-    fi
 }
 
 main "$@"
