@@ -16,9 +16,9 @@ lock() {
     if [[ -f $icon ]]
     then
         # get lockscreen image info
-        R=$(file --dereference $icon | grep -o '[0-9]* x [0-9]*')
-        icon_X=$(echo $R | cut -d' ' -f 1)
-        icon_Y=$(echo $R | cut -d' ' -f 3)
+        R=$(identify $icon | grep -o ' [0-9]*x[0-9]* ')
+        icon_X=$(echo $R | cut -d'x' -f 1)
+        icon_Y=$(echo $R | cut -d'x' -f 2)
 
         # Get attached monitor resolutions and offsets
         # in 1920x1080 @ 0,0 format
@@ -45,6 +45,7 @@ lock() {
     unset IFS
 
     lockscreen=$(mktemp $dir/tmpXXXXXXXXXX.png)
+    echo "convert $image $transformation $locks $lockscreen"
     convert $image $transformation $locks $lockscreen
 
     i3lock -i $lockscreen -t
@@ -61,7 +62,7 @@ Usage: $0 [-hpb] [-s scale] [-o icon] [-t text]
     Scale the blur/pixelation of the lock screen. Higher values indicate more blur/pixelation, default 10
 
 -o <file>, --overlay <file>
-    File to overlay on to the lock screen, default $HOME/.config/i3/lock.png
+    File to overlay on to the lock screen, default $HOME/.config/i3/lock.jpg
 
 -t <text>, --text <text>
     Text to overlay on the lock screen, default "Locked"
@@ -99,7 +100,7 @@ main() {
     fi
   
     if [[ -z $image ]]; then
-        image=$(mktemp $dir/tmpXXXXXXXXXX.png)
+        image=$(mktemp $dir/tmpXXXXXXXXXX.jpeg)
         scrot $image
     fi
 
