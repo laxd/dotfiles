@@ -38,3 +38,6 @@ compton -cb
 
 # Set DPI
 xrandr --dpi 160
+
+# Start urxvt daemon
+urxvtd --quiet --fork --opendisplay
