@@ -41,7 +41,7 @@ bindsym $mod+Ctrl+l exec xautolock -locknow
 bindsym --release Print exec --no-startup-id scrot -s
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec urxvtc
 
 # kill focused window
 bindsym $mod+Shift+q kill
