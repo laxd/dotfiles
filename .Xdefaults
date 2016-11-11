@@ -14,6 +14,33 @@ urxvt*matcher.button:  1
 !  - catch ugly URLs
 urxvt.cutchars:        `()'*<>[]{|}"
 
+! Fixing Annoyances
+
+!  - Disables iso14755 mode
+URxvt.iso14755: False
+
+!  - Allow Ctrl+Arrow keys
+xvt.keysym.C-Up:     \033[1;5A
+URxvt.keysym.C-Down:   \033[1;5B
+URxvt.keysym.C-Right:  \033[1;5C
+URxvt.keysym.C-Left:   \033[1;5D
+URxvt.keysym.C-Prior:  \033[5;5~
+URxvt.keysym.C-Next:   \033[6;5~
+URxvt.keysym.C-Home:   \033[7;5~
+URxvt.keysym.C-End:    \033[8;5~
+
+!  - URL handling
+URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select
+URxvt.url-select.launcher:  chromium
+URxvt.url-select.underline: true
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
+
+!  - Allow copy/paste using normal keybinds
+URxvt.keysym.Shift-Control-c: perl:clipboard:copy
+URxvt.keysym.Shift-Control-v: perl:clipboard:paste
+
 ! Appearance
 urxvt*font: xft:inconsolata:pixelsize=10 
 !  - cursor
