@@ -42,7 +42,7 @@ URxvt.keysym.Shift-Control-c: perl:clipboard:copy
 URxvt.keysym.Shift-Control-v: perl:clipboard:paste
 
 ! Appearance
-urxvt*font: xft:inconsolata:pixelsize=10 
+urxvt*font: xft:inconsolata:size=10
 !  - cursor
 urxvt*cursorColor: #DCDCCC
 !  - pseudo transparency
