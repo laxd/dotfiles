@@ -61,7 +61,7 @@ urxvt*color2:      #00AA00
 ! yellow
 urxvt*color3:      #FFFF00
 ! blue
-urxvt*color4:      #112037
+urxvt*color4:      #244475
 ! purple
 urxvt*color5:      #A020F0
 ! cyan
