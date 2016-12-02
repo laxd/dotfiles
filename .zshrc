@@ -15,6 +15,7 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/jvm/default/b
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR='vim'
+export TERM=rxvt
 
 # Aliases
 alias open="xdg-open"
