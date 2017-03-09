@@ -196,3 +196,6 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && killa
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10 && killall -USR1 py3status
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10 && killall -USR1 py3status
+
+# Start dex to start autostart apps
+exec dex -ae i3
