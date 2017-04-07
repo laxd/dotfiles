@@ -1,7 +1,7 @@
 #! /bin/bash
 
 FILES=( .zshrc .xinitrc .xprofile .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lock.sh .config/i3/lock.png .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .Xdefaults .config/fontconfig/fonts.conf )
-PACKAGES=( git binutils gcc make fakeroot tmux i3 xscreensaver newsbeuter rxvt-unicode urxvt-perls scrot feh base-devel expac sysstat imagemagick xautolock dex)
+PACKAGES=( git binutils gcc make fakeroot tmux i3 xscreensaver newsbeuter rxvt-unicode urxvt-perls scrot feh base-devel expac sysstat imagemagick xautolock dex zsh )
 AUR_PACKAGES=( neofetch neomutt py3status )
 
 usage() {
@@ -17,6 +17,7 @@ usage() {
 	echo " -p install required packages"
 	echo " -v verbose"
 	echo " -w copy wallpapers"
+    echo " -z install oh-my-zsh"
 }
 
 is_verbose() {
@@ -237,6 +238,12 @@ setup_wallpapers() {
 	done
 }
 
+setup_ohmyzsh() {
+    log "Installing ohmyzsh"
+
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+}
+
 ASK_CONFIRM=1
 VERBOSE=1
 FORCE=1
@@ -248,8 +255,9 @@ DO_PACKAGES=1
 DO_AUR_PACKAGES=1
 DO_SETUP_WALLPAPAERS=1
 DO_INSTALL_PACAUR=1
+DO_OH_MY_ZSH_SETUP=1
 
-while getopts ":Aacdfhimpvw" opt; do
+while getopts ":Aacdfhimpvwz" opt; do
 	case $opt in
 		A)
 			DO_AUR_PACKAGES=0
@@ -289,12 +297,16 @@ while getopts ":Aacdfhimpvw" opt; do
 		w)
 			DO_SETUP_WALLPAPERS=0
 			;;
+        z)
+            DO_OH_MY_ZSH_SETUP=0
+            ;;
 		\?)
 			echo "Invalid option : -$OPTARG"
 			exit 2;;
 	esac
 done
 
+[[ $DO_OH_MY_ZSH_SETUP == 0 ]] && setup_ohmyzsh
 [[ $DO_DOTFILES == 0 ]] && symlink_dotfiles
 [[ $DO_MUTT == 0 ]] && setup_mutt
 [[ $DO_PACKAGES == 0 ]] && install_packages
