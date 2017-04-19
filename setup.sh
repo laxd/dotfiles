@@ -13,6 +13,7 @@ usage() {
 	echo " -f force - Overwrite files even if they exist - USE WITH CAUTION"
 	echo " -h Print this help text"
 	echo " -i install pacaur"
+	echo " -I Install i3"
 	echo " -m setup mutt"
 	echo " -p install required packages"
 	echo " -v verbose"
@@ -30,12 +31,12 @@ is_force() {
 
 log() {
 	if is_verbose; then
-		echo $*
+		echo "$@"
 	fi
 }
 
 install_from_aur_manually() {
-	
+
 	if ! confirm "Install $1 from AUR?"; then
 		return 1
 	fi
@@ -45,7 +46,7 @@ install_from_aur_manually() {
 		curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=$1
 		makepkg PKGBUILD --skippgpcheck
 		sudo pacman -U $1*.xz --noconfirm
-	else 
+	else
 		log "$1 is already installed"
 	fi
 
@@ -58,7 +59,7 @@ install_pacaur() {
 	CURRENT_DIR=`pwd`
 
 	mkdir -p /tmp/pacaur_install
-	cd /tmp/pacaur_install
+	cd /tmp/pacaur_install || exit 1
 
 
 	# Git is required for aur installs
@@ -70,7 +71,7 @@ install_pacaur() {
 	if ! install_from_aur_manually cower; then
 		echo "Cower must be installed for pacuar, exiting..."
 
-		cd $CURRENT_DIR
+		cd $CURRENT_DIR || exit 1
 		rm -r /tmp/pacaur_install
 		exit 1
 	fi
@@ -78,7 +79,7 @@ install_pacaur() {
 	# Install pacaur
 	install_from_aur_manually pacaur
 
-	cd $CURRENT_DIR
+	cd $CURRENT_DIR || exit 1
 	rm -r /tmp/pacaur_install
 
 	log "Completed installing pacaur"
@@ -107,7 +108,7 @@ install_aur_packages() {
 	if is_force; then
 		TO_INSTALL=${AUR_PACKAGES[@]}
 	else
-		for p in ${AUR_PACKAGES[@]}; do
+		for p in "${AUR_PACKAGES[@]}"; do
 			if is_installed $p; then
 				log "$p already installed"
 			else
@@ -139,14 +140,14 @@ confirm() {
 
 symlink_dotfiles() {
 	echo "Setting up symlinks for dotfiles"
-	for f in ${FILES[@]}; do
+	for f in "${FILES[@]}"; do
         if [[ -e $DOTFILES/$f ]] && ( is_force || [[ ! -e ~/$f ]] ); then
 			if is_force || confirm "Symlink $DOTFILES/$f to ~/$f?"; then
 
 				log "Creating symlink for ~/$f"
 
 				# Create the parent directory if it doesn't exist
-				mkdir -p $(dirname ~/$f)
+				mkdir -p "$(dirname ~/$f)"
 
                 # If we are forcing, delete target first
                 if is_force && [[ -e ~/$f ]]; then
@@ -156,7 +157,7 @@ symlink_dotfiles() {
 				ln -s $DOTFILES/$f ~/$f
 			fi
 		else
-			log "~/$f already exists or doesn't exist in the repository, skipping..."
+			log "$HOME/$f already exists or doesn't exist in the repository, skipping..."
 		fi
 	done
 }
@@ -207,9 +208,9 @@ install_packages() {
 	TO_INSTALL=()
 
 	if is_force; then
-		TO_INSTALL=${PACKAGES[@]}
+		TO_INSTALL=PACKAGES
 	else
-		for p in ${PACKAGES[@]}; do
+		for p in "${PACKAGES[@]}"; do
 			if is_installed $p; then
 				log "$p already installed"
 			else
@@ -244,6 +245,19 @@ setup_ohmyzsh() {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
 
+setup_i3() {
+    echo "Setting up i3"
+    I3_TARGET=".config/i3/config"
+    I3_FILES=$(find .config/i3/ -name "*-all.config" -o -name "*-`hostname`.config")
+    echo -e "#########################################\n# Combined using github.com/laxd/dotfiles setup on `date`\n#########################################" > $I3_TARGET
+
+    for config in "${I3_FILES[@]}"; do
+        echo "Using $config"
+        echo -e "\n################### $config ###################\n" >> $I3_TARGET
+        cat $config >> $I3_TARGET
+    done
+}
+
 ASK_CONFIRM=1
 VERBOSE=1
 FORCE=1
@@ -253,11 +267,12 @@ DO_DOTFILES=1
 DO_MUTT=1
 DO_PACKAGES=1
 DO_AUR_PACKAGES=1
-DO_SETUP_WALLPAPAERS=1
+DO_SETUP_WALLPAPERS=1
 DO_INSTALL_PACAUR=1
 DO_OH_MY_ZSH_SETUP=1
+DO_INSTALL_I3=1
 
-while getopts ":Aacdfhimpvwz" opt; do
+while getopts ":AacdfhiImpvwz" opt; do
 	case $opt in
 		A)
 			DO_AUR_PACKAGES=0
@@ -266,6 +281,7 @@ while getopts ":Aacdfhimpvwz" opt; do
 			DO_MUTT=0
 			DO_PACKAGES=0
 			DO_SETUP_WALLPAPERS=0
+			DO_INSTALL_I3=0
 			;;
 		a)
 			DO_AUR_PACKAGES=0
@@ -285,6 +301,9 @@ while getopts ":Aacdfhimpvwz" opt; do
 		i)
 			DO_INSTALL_PACAUR=0
 			;;
+		I)
+			DO_INSTALL_I3=0
+			;;
 		m)
 			DO_MUTT=0
 			;;
@@ -297,9 +316,9 @@ while getopts ":Aacdfhimpvwz" opt; do
 		w)
 			DO_SETUP_WALLPAPERS=0
 			;;
-        z)
-            DO_OH_MY_ZSH_SETUP=0
-            ;;
+    z)
+        DO_OH_MY_ZSH_SETUP=0
+        ;;
 		\?)
 			echo "Invalid option : -$OPTARG"
 			exit 2;;
@@ -307,6 +326,7 @@ while getopts ":Aacdfhimpvwz" opt; do
 done
 
 [[ $DO_OH_MY_ZSH_SETUP == 0 ]] && setup_ohmyzsh
+[[ $DO_INSTALL_I3 == 0 ]] && setup_i3
 [[ $DO_DOTFILES == 0 ]] && symlink_dotfiles
 [[ $DO_MUTT == 0 ]] && setup_mutt
 [[ $DO_PACKAGES == 0 ]] && install_packages
