@@ -2,6 +2,7 @@
 import argparse
 import glob
 import socket
+import os
 from subprocess import call
 
 def merge_files(output, patterns=[], comment="#"):
@@ -26,6 +27,7 @@ def is_installed(package):
     return not call(["pacman", "-Qs", "^{}$".format(package)])
 
 packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
+dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options", action="store_true")
@@ -44,6 +46,14 @@ args = parser.parse_args()
 if args.configure_i3:
     print("Configuring i3")
     merge_files(".config/i3/config", [".config/i3/*-all.config", ".config/i3/*-{}.config".format(socket.gethostname())])
+
+if args.dotfiles:
+    print("Symlinking dotfiles")
+
+    for dotfile in dotfiles:
+        # Create parent dir first
+        print(" ".join(["mkdir", "-p", "\"$(dirname $HOME/{})\"".format(dotfile)]))
+        print(" ".join(["ln", "-s", "{}/{}".format(os.getcwd(), dotfile), "$HOME/{}".format(dotfile)]))
 
 if args.install_packages:
     print("Installing packages")
