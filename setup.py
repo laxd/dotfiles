@@ -32,6 +32,15 @@ def is_installed(package):
     logging.debug("{} installed? {}".format(package, is_installed))
     return is_installed
 
+def install_from_aur_manually(package):
+    if not is_installed("git"):
+        call(["sudo", "pacman", "--noconfirm", "-S", "git"])
+
+    call(["curl", "-o", "/tmp/PKGBUILD", "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h={}".format(package), "-O"])
+    call(["makepkg", "/tmp/PKGBUILD", "--skippgpcheck"])
+
+    return call(["sudo", "pacman", "-U", "/tmp/{}*.xz", "--noconfirm"])
+
 packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
 dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
@@ -59,6 +68,13 @@ elif args.verbose >= 2:
 if args.configure_i3 or args.all:
     logging.info("Configuring i3")
     merge_files(".config/i3/config", [".config/i3/*-all.config", ".config/i3/*-{}.config".format(socket.gethostname())])
+
+if args.install_pacaur or args.all:
+    logging.info("Installing pacaur")
+    if not is_installed("cower"):
+        install_from_aur_manually("cower")
+
+    install_from_aur_manually("pacaur")
 
 if args.dotfiles or args.all:
     logging.info("Symlinking dotfiles")
