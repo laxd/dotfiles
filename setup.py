@@ -6,6 +6,18 @@ import os
 import logging
 from subprocess import call
 
+packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
+aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
+dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+
+def install(packages, aur=True):
+    install_targets = [package for package in packages if not is_installed(package) or args.force]
+
+    if install_targets:
+        logging.debug("Installing packages: {}".format(", ".join(install_targets)))
+        command = ["pacaur"] if aur else ["sudo", "pacman"]
+        call(command + ["--noconfirm", "-S"] + install_targets)
+
 def merge_files(output, patterns=[], comment="#"):
     filenames = []
     for pattern in patterns:
@@ -40,10 +52,6 @@ def install_from_aur_manually(package):
     call(["makepkg", "/tmp/PKGBUILD", "--skippgpcheck"])
 
     return call(["sudo", "pacman", "-U", "/tmp/{}*.xz", "--noconfirm"])
-
-packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
-aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
-dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options. Equivalent to -dpPawi", action="store_true")
@@ -104,18 +112,10 @@ if args.dotfiles or args.all:
 
 if args.install_packages or args.all:
     logging.info("Installing packages")
-    install_targets = [package for package in packages if not is_installed(package) or args.force]
-
-    if install_targets:
-        logging.debug("Found packages to install: {}".format(", ".join(install_targets)))
-        call(["sudo", "pacman", "--noconfirm", "-S"] + install_targets)
+    install(packages, aur=False)
 
 if args.install_aur_packages or args.all:
     logging.info("Installing AUR Packages")
-    install_targets = [package for package in aur_packages if not is_installed(pacakge) or args.force]
-
-    if install_targets:
-        logging.debug("Installing packages: {}".format(", ".join(install_targets)))
-        call(["sudo", "pacaur", "--noconfirm", "-S"] + install_targets)
+    install(aur_packages, aur=True)
 
 logging.info("Done!")
