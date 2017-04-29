@@ -84,7 +84,7 @@ if args.dotfiles or args.all:
         source="{}/{}".format(os.getcwd(), dotfile)
         target="$HOME/{}".format(dotfile)
 
-        if not open(source, "r").exists:
+        if not os.path.isfile(source):
             logging.error("{} doesn't exist in repository".format(source))
             continue
 
@@ -92,11 +92,11 @@ if args.dotfiles or args.all:
         target_dir=call(["dirname", target]).stdout
         call(["mkdir", "-p", target_dir])
 
-        if open(dotfile, "r").exists and args.force:
+        if os.path.isfile(dotfile) and args.force:
             logging.debug("Overwriting {}".format(target))
             call(["rm", "-f", target])
 
-        if not open(target, "r").exists:
+        if not os.path.isfile(target):
             logging.debug("Symlinking {}->{}".format(target, source))
             call(["ln", "-s", source, target])
         else:
