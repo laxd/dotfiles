@@ -27,7 +27,7 @@ def merge_files(output, pattern=None, comment="#"):
     for arg in ["all", socket.gethostname()]:
         filenames.extend(glob.glob(pattern.format(arg)))
 
-    logging.debug("Found {} from patterns: {}".format(", ".join(filenames), ", ".join(patterns)))
+    logging.debug("Found {} from patterns".format(", ".join(filenames)))
 
     open(output, 'w').close()
     config = open(output, 'a')
@@ -35,6 +35,7 @@ def merge_files(output, pattern=None, comment="#"):
     config.write("{}\n{} Combined using github.com/laxd/dotfiles setup\n{}\n".format(comment*40, comment, comment*40))
 
     for file_name in filenames:
+        logging.debug("Including {} in {}".format(file_name, output))
         file = open(file_name, "r")
         config.write("\n{} {} {}\n\n".format(comment*15, file.name, comment*15))
         config.write(file.read())
@@ -64,8 +65,8 @@ parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles, this will need t
 parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, or in the case of packages, reinstall them if they are installed", action="store_true")
 parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
-parser.add_argument("-i", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
-parser.add_argument("-i", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
+parser.add_argument("-g", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
+parser.add_argument("-x", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")

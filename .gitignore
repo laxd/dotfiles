@@ -2,4 +2,7 @@
 imapconfig
 header_cache
 message_cache
+
+# Combined files
 .config/i3/config
+.xprofile
