@@ -65,6 +65,7 @@ parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, 
 parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
 parser.add_argument("-i", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
+parser.add_argument("-i", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
@@ -86,6 +87,10 @@ if args.configure_i3 or args.all:
 if args.configure_git or args.all:
     logging.info("Configuring git")
     merge_files(output=".gitconfig")
+
+if args.configure_x or args.all:
+    logging.info("Configuring X")
+    merge_files(output=".xprofile")
 
 if args.install_pacaur or args.all:
     logging.info("Installing pacaur")

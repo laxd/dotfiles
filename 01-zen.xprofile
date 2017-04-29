@@ -1,0 +1,2 @@
+# Set DPI
+xrandr --dpi 160

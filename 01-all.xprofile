@@ -36,8 +36,5 @@ setxkbmap -option caps:super
 # Start compton
 compton -cb
 
-# Set DPI
-xrandr --dpi 160
-
 # Start urxvt daemon
 urxvtd --quiet --fork --opendisplay
