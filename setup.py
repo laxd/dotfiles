@@ -18,10 +18,14 @@ def install(packages, aur=True):
         command = ["pacaur"] if aur else ["sudo", "pacman"]
         call(command + ["--noconfirm", "-S"] + install_targets)
 
-def merge_files(output, patterns=[], comment="#"):
+# Requires a pattern if the output file contains a directory
+def merge_files(output, pattern=None, comment="#"):
+    if pattern is None:
+        pattern="*-{}" + output if output.startswith(".") else ("." + output)
+
     filenames = []
-    for pattern in patterns:
-        filenames.extend(glob.glob(pattern))
+    for arg in ["all", socket.gethostname()]:
+        filenames.extend(glob.glob(pattern.format(arg)))
 
     logging.debug("Found {} from patterns: {}".format(", ".join(filenames), ", ".join(patterns)))
 
@@ -56,10 +60,11 @@ def install_from_aur_manually(package):
 parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options. Equivalent to -dpPawi", action="store_true")
 # parser.add_argument("-c", "--confirm", help="Confirm actions", action="store_true")
-parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles", action="store_true")
+parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles, this will need to be run after each '--configure-*' command", action="store_true")
 parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, or in the case of packages, reinstall them if they are installed", action="store_true")
 parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
-parser.add_argument("-i", "--configure-i3", help="Configure i3", action="store_true")
+parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
+parser.add_argument("-i", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
@@ -76,7 +81,11 @@ elif args.verbose >= 2:
 
 if args.configure_i3 or args.all:
     logging.info("Configuring i3")
-    merge_files(".config/i3/config", [".config/i3/*-all.config", ".config/i3/*-{}.config".format(socket.gethostname())])
+    merge_files(output=".config/i3/config", pattern=".config/i3/*-{}.config")
+
+if args.configure_git or args.all:
+    logging.info("Configuring git")
+    merge_files(output=".gitconfig")
 
 if args.install_pacaur or args.all:
     logging.info("Installing pacaur")
