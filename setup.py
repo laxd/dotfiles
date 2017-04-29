@@ -52,7 +52,7 @@ parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles", action="store_t
 # parser.add_argument("-f", "--force", help="Overwrite files, even if they exist", action="store_true")
 parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3", action="store_true")
-parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
+# parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, adds --install-pacaur option", action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase logging", action="count", default=0)
