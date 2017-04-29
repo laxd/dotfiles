@@ -42,11 +42,11 @@ def install_from_aur_manually(package):
     return call(["sudo", "pacman", "-U", "/tmp/{}*.xz", "--noconfirm"])
 
 packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
+aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
 dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options", action="store_true")
-parser.add_argument("-a", "--aur", help="Install AUR packages", action="store_true")
 # parser.add_argument("-c", "--confirm", help="Confirm actions", action="store_true")
 parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles", action="store_true")
 # parser.add_argument("-f", "--force", help="Overwrite files, even if they exist", action="store_true")
@@ -54,6 +54,7 @@ parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="sto
 parser.add_argument("-i", "--configure-i3", help="Configure i3", action="store_true")
 parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
+parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, adds --install-pacaur option", action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase logging", action="count", default=0)
 parser.add_argument("-w", "--wallpapers", help="Copy wallpapers", action="store_true")
 args = parser.parse_args()
@@ -91,5 +92,13 @@ if args.install_packages or args.all:
     if install_targets:
         print("Found packages to install: {}".format(", ".join(install_targets)))
         call(["sudo", "pacman", "--noconfirm", "-S"] + install_targets)
+
+if args.install_aur_packages or args.all:
+    print("Installing AUR Packages")
+    install_targets = [package for package in aur_packages if not is_installed(pacakge)]
+
+    if install_targets:
+        print("Installing packages: {}".format(", ".join(install_targets)))
+        call(["sudo", "pacaur", "--noconfirm", "-S"] + install_targets)
 
 print("Done!")
