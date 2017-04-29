@@ -49,7 +49,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options. Equivalent to -dpPawi", action="store_true")
 # parser.add_argument("-c", "--confirm", help="Confirm actions", action="store_true")
 parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles", action="store_true")
-parser.add_argument("-f", "--force", help="Overwrite files, even if they exist", action="store_true")
+parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, or in the case of packages, reinstall them if they are installed", action="store_true")
 parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
@@ -104,7 +104,7 @@ if args.dotfiles or args.all:
 
 if args.install_packages or args.all:
     logging.info("Installing packages")
-    install_targets = [package for package in packages if not is_installed(package)]
+    install_targets = [package for package in packages if not is_installed(package) or args.force]
 
     if install_targets:
         logging.debug("Found packages to install: {}".format(", ".join(install_targets)))
@@ -112,7 +112,7 @@ if args.install_packages or args.all:
 
 if args.install_aur_packages or args.all:
     logging.info("Installing AUR Packages")
-    install_targets = [package for package in aur_packages if not is_installed(pacakge)]
+    install_targets = [package for package in aur_packages if not is_installed(pacakge) or args.force]
 
     if install_targets:
         logging.debug("Installing packages: {}".format(", ".join(install_targets)))
