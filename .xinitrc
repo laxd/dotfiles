@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Source .xprofile if we have one
-[ -f $HOME/.xprofie ] && source $HOME/.xprofile
+[ -f $HOME/.xprofile ] && source $HOME/.xprofile
 
 # Keep something as the default
 wm=${1:-i3}
@@ -31,4 +31,3 @@ case $wm in
     # Don't know this WM, try running as a command
     *) exec $1;;
 esac
-
