@@ -27,6 +27,8 @@ def merge_files(output, pattern=None, comment="#"):
     for arg in ["all", socket.gethostname()]:
         filenames.extend(glob.glob(pattern.format(arg)))
 
+    filenames.sort()
+
     logging.debug("Found {} from patterns".format(", ".join(filenames)))
 
     open(output, 'w').close()
