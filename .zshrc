@@ -2,7 +2,10 @@
 export ZSH=~/.oh-my-zsh
 
 # Name of the theme to load (from ~/.oh-my-zsh/themes)
-ZSH_THEME="gallois"
+ZSH_THEME="agnoster"
+
+# Required properties for theme
+DEFAULT_USER=`whoami`
 
 # Plugins to load (from ~/.oh-my-zsh/plugins)
 plugins=(git cp docker pip archlinux systemd)
