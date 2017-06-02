@@ -39,7 +39,7 @@ URxvt.keysym.Shift-Control-c: perl:clipboard:copy
 URxvt.keysym.Shift-Control-v: perl:clipboard:paste
 
 ! Appearance
-urxvt*font: xft:inconsolata:size=10
+urxvt*font: xft:inconsolata:size=10,xft:Inconsolata\ for\ Powerline:pixelsize=12
 
 !  - Changing font size
 URxvt.resize-font.smaller: C-Down
