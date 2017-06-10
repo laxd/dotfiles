@@ -3,12 +3,24 @@ import argparse
 import glob
 import socket
 import os
+import sys
 import logging
 from subprocess import call
 
 packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
 aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
 dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+
+def confirm(text, values={"Y": True,"N": False}):
+    while True:
+        sys.stdout.write("{} [{}]".format(text, "/".join(values)))
+        choice = input().upper();
+
+        if choice in values.keys():
+            return values[choice];
+        else:
+            sys.stdout.write("Invalid selection, please enter one of {}\n".format(", ".join(values)))
+
 
 def install(packages, aur=True):
     install_targets = [package for package in packages if not is_installed(package) or args.force]
