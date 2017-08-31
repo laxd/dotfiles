@@ -1,7 +1,7 @@
 #! /bin/bash
 
 FILES=( .zshrc .xinitrc .xprofile .gitconfig .gitignore_global .vimrc .gradle .muttrc .tmux.conf .vnc/xstartup .config/i3/config .config/i3/lock.sh .config/i3/lock.png .config/i3status/config .config/neofetch/config .newsbeuter/urls .xscreensaver .Xdefaults .config/fontconfig/fonts.conf )
-PACKAGES=( git binutils gcc make fakeroot pkg-config tmux i3 xscreensaver newsbeuter rxvt-unicode urxvt-perls scrot feh base-devel expac sysstat imagemagick xautolock dex zsh )
+PACKAGES=( git binutils gcc make fakeroot pkg-config tmux i3 dmenu xscreensaver newsbeuter rxvt-unicode urxvt-perls scrot feh base-devel expac sysstat imagemagick xautolock dex zsh )
 AUR_PACKAGES=( neofetch neomutt py3status urxvt-resize-font-git )
 
 usage() {
