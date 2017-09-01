@@ -9,7 +9,13 @@ from subprocess import call
 
 packages=["git", "tmux", "xscreensaver", "newsbeuter", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
 aur_packages=["neofetch", "neomutt"]
-dotfiles=[".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".config/fontconfig/fonts.conf"]
+dotfiles=[".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".config/fontconfig/fonts.conf"]
+
+
+def configure_vim():
+    install("vim")
+    symlink(".vimrc")
+    call(["vim", "-c", "VundleUpdate", "-c", "quitall"])
 
 
 def configure_i3():
@@ -163,6 +169,7 @@ parser.add_argument("-g", "--configure-git", help="Configure git, combining the 
 parser.add_argument("-x", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
 parser.add_argument("-z", "--configure-zsh", help="Install zsh, setup oh-my-zsh and copy .zshrc config", action="store_true")
 parser.add_argument("-P", "--configure-pacaur", help="Install pacaur, and any required dependencies", action="store_true")
+parser.add_argument("-V", "--configure-vim", help="Install vim, including Vundle plugins", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
@@ -191,6 +198,9 @@ if args.configure_git or args.all:
 
 if args.configure_x or args.all:
     configure_x()
+
+if args.configure_vim or args.all:
+    configure_vim()
 
 if args.dotfiles or args.all:
     logging.info("Symlinking dotfiles")
