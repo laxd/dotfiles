@@ -58,10 +58,12 @@ def merge_files(output, pattern=None, comment="#"):
     config.close()
     logging.debug("Finished writing {}".format(output))
 
+
 def is_installed(package):
     is_installed = not call(["pacman", "-Qs", "^{}$".format(package)])
     logging.debug("{} installed? {}".format(package, is_installed))
     return is_installed
+
 
 def install_from_aur_manually(package):
     if not is_installed("git"):
@@ -71,6 +73,25 @@ def install_from_aur_manually(package):
     call(["makepkg", "/tmp/PKGBUILD", "--skippgpcheck"])
 
     return call(["sudo", "pacman", "-U", "/tmp/{}*.xz", "--noconfirm"])
+
+
+def symlink(filename, target=None):
+    source = "{}/{}".format(os.getcwd(), filename)
+    target = "$HOME/{}".format(dotfile) if target is None else target
+
+    if not os.path.isfile(source):
+        logging.error("{} doesn't exist".format(source))
+        return
+
+    # Create parent dir first, just in case it doesn't exist.
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+
+    if not os.path.isfile(target):
+        logging.debug("Symlinking {}->{}".format(target, source))
+        os.symlink(source, target)
+    else:
+        logging.debug("{} already exists")
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options. Equivalent to -dpPawi", action="store_true")
@@ -118,26 +139,7 @@ if args.dotfiles or args.all:
     logging.info("Symlinking dotfiles")
 
     for dotfile in dotfiles:
-        source="{}/{}".format(os.getcwd(), dotfile)
-        target="$HOME/{}".format(dotfile)
-
-        if not os.path.isfile(source):
-            logging.error("{} doesn't exist in repository".format(source))
-            continue
-
-        # Create parent dir first, just in case it doesn't exist.
-        target_dir=call(["dirname", target]).stdout
-        call(["mkdir", "-p", target_dir])
-
-        if os.path.isfile(dotfile) and args.force:
-            logging.debug("Overwriting {}".format(target))
-            call(["rm", "-f", target])
-
-        if not os.path.isfile(target):
-            logging.debug("Symlinking {}->{}".format(target, source))
-            call(["ln", "-s", source, target])
-        else:
-            logging.debug("{} already exists")
+        symlink(dotfile)
 
 if args.install_packages or args.all:
     logging.info("Installing packages")
