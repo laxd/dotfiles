@@ -9,7 +9,7 @@ from subprocess import call
 
 packages=["git", "tmux", "xscreensaver", "newsbeuter", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
 aur_packages=["neofetch", "neomutt"]
-dotfiles=[".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+dotfiles=[".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".config/fontconfig/fonts.conf"]
 
 
 def configure_i3():
@@ -21,6 +21,7 @@ def configure_i3():
     symlink(".config/i3status/config")
     symlink(".config/i3/lock.sh")
     symlink(".config/i3/lock.png")
+    symlink(".Xdefaults")
 
 
 def configure_zsh():
