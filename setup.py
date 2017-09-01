@@ -7,9 +7,19 @@ import sys
 import logging
 from subprocess import call
 
-packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "i3", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
+packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
 aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
-dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/i3/config", ".config/i3/lock.sh", ".config/i3/lock.png", ".config/i3status/config", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+
+
+def configure_i3():
+    logging.info("Installing i3")
+    install("i3")
+    merge_files(output=".config/i3/config", pattern=".config/i3/*-{}.config")
+    symlink(".config/i3/config")
+    symlink(".config/i3status/config")
+    symlink(".config/i3/lock.sh")
+    symlink(".config/i3/lock.png")
 
 
 def confirm(text, values={"Y": True,"N": False}):
@@ -139,8 +149,7 @@ elif args.verbose >= 2:
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 if args.configure_i3 or args.all:
-    logging.info("Configuring i3")
-    merge_files(output=".config/i3/config", pattern=".config/i3/*-{}.config")
+    configure_i3()
 
 if args.configure_git or args.all:
     logging.info("Configuring git")
