@@ -7,9 +7,39 @@ import sys
 import logging
 from subprocess import call
 
-packages=["git", "tmux", "xscreensaver", "newsbeuter", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
-aur_packages=["neofetch", "neomutt"]
-dotfiles=[".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".config/fontconfig/fonts.conf"]
+
+def symlink_dotfiles():
+    dotfiles = [".gradle",
+                ".muttrc",
+                ".tmux.conf",
+                ".vnc/xstartup",
+                ".config/neofetch/config",
+                ".newsbeuter/urls",
+                ".xscreensaver",
+                ".config/fontconfig/fonts.conf"]
+
+    for dotfile in dotfiles:
+        symlink(dotfile)
+
+
+def install_packages():
+    logging.info("Installing packages...")
+    install(["git",
+             "tmux",
+             "xscreensaver",
+             "newsbeuter",
+             "scrot",
+             "feh",
+             "sysstat",
+             "imagemagick",
+             "xautolock",
+             "dex"],
+            aur=False)
+
+    if is_installed("pacaur"):
+        install(["neofetch",
+             "neomutt"],
+            aur=True)
 
 
 def configure_vim():
@@ -133,7 +163,7 @@ def is_installed(package):
 
 def install_from_aur_manually(package):
     if not is_installed("git"):
-        call(["sudo", "pacman", "--noconfirm", "-S", "git"])
+        install("git")
 
     call(["curl", "-o", "/tmp/PKGBUILD", "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h={}".format(package), "-O"])
     call(["makepkg", "/tmp/PKGBUILD", "--skippgpcheck"])
@@ -203,17 +233,9 @@ if args.configure_vim or args.all:
     configure_vim()
 
 if args.dotfiles or args.all:
-    logging.info("Symlinking dotfiles")
-
-    for dotfile in dotfiles:
-        symlink(dotfile)
+    symlink_dotfiles()
 
 if args.install_packages or args.all:
-    logging.info("Installing packages")
-    install(packages, aur=False)
-
-if args.install_aur_packages or args.all:
-    logging.info("Installing AUR Packages")
-    install(aur_packages, aur=True)
+    install_packages()
 
 logging.info("Done!")
