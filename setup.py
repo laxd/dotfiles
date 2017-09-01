@@ -7,7 +7,7 @@ import sys
 import logging
 from subprocess import call
 
-packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex"]
+packages=["git", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
 aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
 dotfiles=[".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
@@ -27,6 +27,12 @@ def configure_zsh():
     call(["sh", "-c",
           "\"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""])
     symlink(".zshrc")
+
+
+def configure_pacaur():
+    install(["git", "make", "fakeroot", "binutils", "gcc", "pkg-config", "expac", "yajl"])
+    install_from_aur_manually("cower")
+    install_from_aur_manually("pacaur")
 
 
 def confirm(text, values={"Y": True,"N": False}):
@@ -137,11 +143,11 @@ parser.add_argument("-A", "--all", help="Perform a full setup including ALL opti
 # parser.add_argument("-c", "--confirm", help="Confirm actions", action="store_true")
 parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles, this will need to be run after each '--configure-*' command", action="store_true")
 parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, or in the case of packages, reinstall them if they are installed", action="store_true")
-parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
 parser.add_argument("-g", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
 parser.add_argument("-x", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
 parser.add_argument("-z", "--configure-zsh", help="Install zsh, setup oh-my-zsh and copy .zshrc config", action="store_true")
+parser.add_argument("-P", "--configure-pacaur", help="Install pacaur, and any required dependencies", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
@@ -162,6 +168,9 @@ if args.configure_i3 or args.all:
 if args.configure_zsh or args.all:
     configure_zsh()
 
+if args.configure_pacaur or args.all:
+    configure_pacaur()
+
 if args.configure_git or args.all:
     logging.info("Configuring git")
     merge_files(output=".gitconfig")
@@ -169,13 +178,6 @@ if args.configure_git or args.all:
 if args.configure_x or args.all:
     logging.info("Configuring X")
     merge_files(output=".xprofile")
-
-if args.install_pacaur or args.all:
-    logging.info("Installing pacaur")
-    if not is_installed("cower"):
-        install_from_aur_manually("cower")
-
-    install_from_aur_manually("pacaur")
 
 if args.dotfiles or args.all:
     logging.info("Symlinking dotfiles")
