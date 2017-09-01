@@ -42,6 +42,57 @@ def install_packages():
             aur=True)
 
 
+def configure_mutt():
+    mutt_config_dotfile="exampleimapconfig"
+    mutt_config="~/.mutt/imapconfig"
+
+    os.makedirs("~/.mutt/tmp", exist_ok=True)
+
+    logging.info("Setting up mutt")
+
+    if not os.path.isfile(mutt_config):
+        sys.stdout.write("Mail Domain:")
+        domain = input()
+
+        sys.stdout.write("Username:")
+        username = input()
+
+        sys.stdout.write("Password:")
+        password = input()
+
+        sys.stdout.write("Real Name:")
+        name = input()
+
+        sys.stdout.write("Sent Folder [Sent]:")
+        sent_folder = input()
+
+        sys.stdout.write("Drafts Folder [Drafts]")
+        drafts_folder = input()
+
+        sys.stdout.write("Trash Folder [Trash]")
+        trash_folder = input()
+
+        f = open(mutt_config_dotfile, 'r')
+        data = f.read()
+        f.close()
+
+        data = data.replace("$DOMAIN", domain)
+        data = data.replace("$USERNAME", username)
+        data = data.replace("$PASSWORD", password)
+        data = data.replace("$NAME", name)
+        data = data.replace("$SENT", sent_folder)
+        data = data.replace("$DRAFTS", drafts_folder)
+        data = data.replace("$TRASH", trash_folder)
+
+        f = open(mutt_config, 'w')
+        f.write(data)
+        f.close()
+
+        os.chmod(mutt_config, 700)
+    else:
+        logging.error(mutt_config + " already exists! Remove this file to enable mutt setup")
+
+
 def configure_vim():
     install("vim")
     symlink(".vimrc")
