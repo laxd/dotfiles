@@ -7,14 +7,15 @@ import sys
 import logging
 from subprocess import call
 
-packages=["git", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
-aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
+packages=["git", "tmux", "xscreensaver", "newsbeuter", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
+aur_packages=["neofetch", "neomutt"]
 dotfiles=[".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 
 def configure_i3():
     logging.info("Installing i3")
-    install("i3")
+    install(["i3", "rxvt-unicode", "urxvt-perls"])
+    install("urxvt-resize-font-git", aur=True)
     merge_files(output=".config/i3/config", pattern=".config/i3/*-{}.config")
     symlink(".config/i3/config")
     symlink(".config/i3status/config")
