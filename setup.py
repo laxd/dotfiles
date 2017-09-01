@@ -9,7 +9,7 @@ from subprocess import call
 
 packages=["git", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "sysstat", "imagemagick", "xautolock", "dex"]
 aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
-dotfiles=[".xinitrc", ".xprofile", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+dotfiles=[".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 
 def configure_i3():
@@ -40,6 +40,12 @@ def configure_git():
     merge_files(output=".gitconfig")
     symlink(".gitconfig")
     symlink(".gitignore_global")
+
+
+def configure_x():
+    merge_files(output=".xprofile")
+    symlink(".xprofile")
+    symlink(".xinitrc")
 
 
 def confirm(text, values={"Y": True,"N": False}):
@@ -182,8 +188,7 @@ if args.configure_git or args.all:
     configure_git()
 
 if args.configure_x or args.all:
-    logging.info("Configuring X")
-    merge_files(output=".xprofile")
+    configure_x()
 
 if args.dotfiles or args.all:
     logging.info("Symlinking dotfiles")
