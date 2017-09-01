@@ -7,9 +7,9 @@ import sys
 import logging
 from subprocess import call
 
-packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex", "zsh"]
+packages=["git", "binutils", "gcc", "make", "fakeroot", "tmux", "xscreensaver", "newsbeuter", "rxvt-unicode", "urxvt-perls", "scrot", "feh", "base-devel", "expac", "sysstat", "imagemagick", "xautolock", "dex"]
 aur_packages=["neofetch", "neomutt", "py3status", "urxvt-resize-font-git"]
-dotfiles=[".zshrc", ".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
+dotfiles=[".xinitrc", ".xprofile", ".gitconfig", ".gitignore_global", ".vimrc", ".gradle", ".muttrc", ".tmux.conf", ".vnc/xstartup", ".config/neofetch/config", ".newsbeuter/urls", ".xscreensaver", ".Xdefaults", ".config/fontconfig/fonts.conf"]
 
 
 def configure_i3():
@@ -20,6 +20,13 @@ def configure_i3():
     symlink(".config/i3status/config")
     symlink(".config/i3/lock.sh")
     symlink(".config/i3/lock.png")
+
+
+def configure_zsh():
+    install("zsh")
+    call(["sh", "-c",
+          "\"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""])
+    symlink(".zshrc")
 
 
 def confirm(text, values={"Y": True,"N": False}):
@@ -134,6 +141,7 @@ parser.add_argument("-P", "--install-pacaur", help="Install pacaur", action="sto
 parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
 parser.add_argument("-g", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
 parser.add_argument("-x", "--configure-x", help="Configure X, combining the .xprofile files", action="store_true")
+parser.add_argument("-z", "--configure-zsh", help="Install zsh, setup oh-my-zsh and copy .zshrc config", action="store_true")
 # parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
@@ -150,6 +158,9 @@ elif args.verbose >= 2:
 
 if args.configure_i3 or args.all:
     configure_i3()
+
+if args.configure_zsh or args.all:
+    configure_zsh()
 
 if args.configure_git or args.all:
     logging.info("Configuring git")
