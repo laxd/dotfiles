@@ -30,8 +30,28 @@ def install(packages, aur=True):
         command = ["pacaur"] if aur else ["sudo", "pacman"]
         call(command + ["--noconfirm", "-S"] + install_targets)
 
-# Requires a pattern if the output file contains a directory
 def merge_files(output, pattern=None, comment="#"):
+    """
+    Merges all files that match the given pattern into a single output file.
+
+    Mutliple arguments are used to help specify the files to merge:
+
+    all - These files apply to all merges
+    hostname - These files will only be picked up if their hostname matches
+
+    Example:
+
+    Given the output file .xprofile, and the machine hostname being zen, the following files will be picked up:
+
+    01-zen.xprofile (as it matches *-zen.xprofile)
+    99-all.xprofile (as it matches *-all.xprofile)
+
+    :param output: File that will be created as a result of merging the files
+    :param pattern: Pattern to use to match files, a single {} can be used to match
+        the argument (i.e. "all", the hostname of the machine).
+        MUST be specified if the output file contains a directory (i.e. .config/i3/config)
+    :param comment: Character to use for comments
+    """
     if pattern is None:
         pattern="*-{}" + output if output.startswith(".") else ("." + output)
 
