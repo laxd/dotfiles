@@ -23,7 +23,7 @@ def confirm(text, values={"Y": True,"N": False}):
             sys.stdout.write("Invalid selection, please enter one of {}\n".format(", ".join(values)))
 
 
-def install(packages, aur=True):
+def install(packages, aur=False):
     install_targets = [package for package in packages if not is_installed(package) or args.force]
 
     if install_targets:
