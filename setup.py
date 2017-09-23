@@ -251,7 +251,7 @@ parser.add_argument("-x", "--configure-x", help="Configure X, combining the .xpr
 parser.add_argument("-z", "--configure-zsh", help="Install zsh, setup oh-my-zsh and copy .zshrc config", action="store_true")
 parser.add_argument("-P", "--configure-pacaur", help="Install pacaur, and any required dependencies", action="store_true")
 parser.add_argument("-V", "--configure-vim", help="Install vim, including Vundle plugins", action="store_true")
-# parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
+parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase logging", action="count", default=0)
@@ -282,6 +282,9 @@ if args.configure_x or args.all:
 
 if args.configure_vim or args.all:
     configure_vim()
+
+if args.configure_mutt or args.all:
+    configure_mutt()
 
 if args.dotfiles or args.all:
     symlink_dotfiles()
