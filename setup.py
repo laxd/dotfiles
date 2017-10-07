@@ -135,6 +135,8 @@ def configure_x():
     symlink(".xprofile")
     symlink(".xinitrc")
 
+def configure_dev():
+    install(["brackets"], aur=True)
 
 def confirm(text, values={"Y": True,"N": False}):
     while True:
@@ -243,6 +245,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-A", "--all", help="Perform a full setup including ALL options. Equivalent to -dpPawi", action="store_true")
 # parser.add_argument("-c", "--confirm", help="Confirm actions", action="store_true")
 parser.add_argument("-d", "--dotfiles", help="Symlink dotfiles, this will need to be run after each '--configure-*' command", action="store_true")
+parser.add_argument("-D", "--configure-dev", help="Install IDEs and setup dev environment", action="store_true")
 parser.add_argument("-f", "--force", help="Overwrite files, even if they exist, or in the case of packages, reinstall them if they are installed", action="store_true")
 parser.add_argument("-i", "--configure-i3", help="Configure i3, combining the .config/i3/config files", action="store_true")
 parser.add_argument("-g", "--configure-git", help="Configure git, combining the .gitconfig files", action="store_true")
@@ -278,6 +281,9 @@ if args.configure_git or args.all:
 
 if args.configure_x or args.all:
     configure_x()
+    
+if args.configure_dev or args.all:
+    configure_dev()
 
 if args.configure_vim or args.all:
     configure_vim()
