@@ -25,6 +25,7 @@ def symlink_dotfiles():
 def install_packages():
     logging.info("Installing packages...")
     install(["git",
+             "openssh",
              "tmux",
              "xscreensaver",
              "newsbeuter",
@@ -37,8 +38,7 @@ def install_packages():
             aur=False)
 
     if is_installed("pacaur"):
-        install(["neofetch",
-             "neomutt"],
+        install(["neofetch"],
             aur=True)
 
 
@@ -94,15 +94,15 @@ def configure_mutt():
 
 
 def configure_vim():
-    install("vim")
+    install(["vim"])
     symlink(".vimrc")
     call(["vim", "-c", "VundleUpdate", "-c", "quitall"])
 
 
 def configure_i3():
     logging.info("Installing i3")
-    install(["i3", "rxvt-unicode", "urxvt-perls"])
-    install("urxvt-resize-font-git", aur=True)
+    install(["i3", "dmenu", "rxvt-unicode", "urxvt-perls"])
+    install(["urxvt-resize-font-git", "py3status"], aur=True)
     merge_files(output=".config/i3/config", pattern=".config/i3/*-{}.config")
     symlink(".config/i3/config")
     symlink(".config/i3status/config")
@@ -112,10 +112,9 @@ def configure_i3():
 
 
 def configure_zsh():
-    install("zsh")
-    call(["sh", "-c",
-          "\"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""])
+    install(["zsh"])
     symlink(".zshrc")
+    call("sh -c \"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\"", shell=True)
 
 
 def configure_pacaur():
@@ -125,7 +124,7 @@ def configure_pacaur():
 
 
 def configure_git():
-    install("git")
+    install(["git"])
     merge_files(output=".gitconfig")
     symlink(".gitconfig")
     symlink(".gitignore_global")
@@ -214,7 +213,7 @@ def is_installed(package):
 
 def install_from_aur_manually(package):
     if not is_installed("git"):
-        install("git")
+        install(["git"])
 
     call(["curl", "-o", "/tmp/PKGBUILD", "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h={}".format(package), "-O"])
     call(["makepkg", "/tmp/PKGBUILD", "--skippgpcheck"])
@@ -224,7 +223,7 @@ def install_from_aur_manually(package):
 
 def symlink(filename, target=None):
     source = "{}/{}".format(os.getcwd(), filename)
-    target = "$HOME/{}".format(dotfile) if target is None else target
+    target = os.path.expanduser("~/{}".format(filename) if target is None else target)
 
     if not os.path.isfile(source):
         logging.error("{} doesn't exist".format(source))
@@ -237,7 +236,7 @@ def symlink(filename, target=None):
         logging.debug("Symlinking {}->{}".format(target, source))
         os.symlink(source, target)
     else:
-        logging.debug("{} already exists")
+        logging.debug("{} already exists".format(target))
 
 
 parser = argparse.ArgumentParser()
