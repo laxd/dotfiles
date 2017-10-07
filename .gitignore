@@ -6,3 +6,4 @@ message_cache
 # Combined files
 .config/i3/config
 .xprofile
+.gitconfig
