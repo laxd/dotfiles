@@ -30,14 +30,14 @@ feh --randomize --bg-scale ~/.wallpapers/*
 # Set screen locker to run
 xautolock -time 15 -locker "$HOME/.config/i3/lock.sh -p" &
 
-# Re-map caps lock
+# Set keyboard mapping to UK
+setxkbmap gb
+
+# Re-map caps lock to super
 setxkbmap -option caps:super
 
 # Start compton
 compton -cb
-
-# Set DPI
-xrandr --dpi 160
 
 # Start urxvt daemon
 urxvtd --quiet --fork --opendisplay
