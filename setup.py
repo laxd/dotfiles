@@ -135,8 +135,13 @@ def configure_x():
     symlink(".xprofile")
     symlink(".xinitrc")
 
+
 def configure_dev():
-    install(["brackets"], aur=True)
+    install(["jdk8", "brackets", "jetbrains-toolbox", "intellij-idea-ultimate-edition", "pycharm-professional", "android-studio"], aur=True)
+
+
+def configure_photography():
+    install(["darktable"])
 
 def confirm(text, values={"Y": True,"N": False}):
     while True:
@@ -254,6 +259,7 @@ parser.add_argument("-z", "--configure-zsh", help="Install zsh, setup oh-my-zsh 
 parser.add_argument("-P", "--configure-pacaur", help="Install pacaur, and any required dependencies", action="store_true")
 parser.add_argument("-V", "--configure-vim", help="Install vim, including Vundle plugins", action="store_true")
 parser.add_argument("-m", "--configure-mutt", help="Configure Mutt", action="store_true")
+parser.add_argument("-o", "--configure-photography", help="Configure photography editing environment", action="store_true")
 parser.add_argument("-p", "--install-packages", help="Install packages", action="store_true")
 parser.add_argument("-a", "--install-aur-packages", help="Install AUR packages. If pacaur is not installed, implies --install-pacaur option", action="store_true")
 parser.add_argument("-v", "--verbose", help="Increase logging", action="count", default=0)
@@ -284,6 +290,9 @@ if args.configure_x or args.all:
     
 if args.configure_dev or args.all:
     configure_dev()
+
+if args.configure_photography or args.all:
+    configure_photography()
 
 if args.configure_vim or args.all:
     configure_vim()
