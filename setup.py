@@ -137,7 +137,17 @@ def configure_x():
 
 
 def configure_dev():
-    install(["jdk8", "brackets", "jetbrains-toolbox", "intellij-idea-ultimate-edition", "pycharm-professional", "android-studio"], aur=True)
+    # Docker
+    install(["docker", "docker-compose"], aur=False)
+
+    # Java
+    install(["jdk8"], aur=True)
+
+    # Python
+    install(["python-pip"])
+
+    # IDEs
+    install(["brackets", "jetbrains-toolbox", "intellij-idea-ultimate-edition", "pycharm-professional", "android-studio"], aur=True)
 
 
 def configure_photography():
