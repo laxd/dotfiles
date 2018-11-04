@@ -34,6 +34,7 @@ def install_packages():
              "sysstat",
              "imagemagick",
              "xautolock",
+             "rofi",
              "dex"],
             aur=False)
 
