@@ -126,7 +126,6 @@ def configure_pacaur():
 
 def configure_git():
     install(["git"])
-    merge_files(output=".gitconfig")
     symlink(".gitconfig")
     symlink(".gitignore_global")
 
@@ -164,14 +163,20 @@ def confirm(text, values={"Y": True,"N": False}):
         else:
             sys.stdout.write("Invalid selection, please enter one of {}\n".format(", ".join(values)))
 
+os_types = {
+        "debian": "sudo apt-get install -y"
+        }
 
-def install(packages, aur=False):
-    install_targets = [package for package in packages if not is_installed(package) or args.force]
+os = "debian"
 
-    if install_targets:
-        logging.debug("Installing packages: {}".format(", ".join(install_targets)))
-        command = ["pacaur"] if aur else ["sudo", "pacman"]
-        call(command + ["--noconfirm", "-S"] + install_targets)
+def install(package, debian=None, arch=None):
+    if os == "debian":
+        package = debian
+    if os == "arch":
+        package = arch
+
+    logging.debug("Installing packages: {}".format(", ".join(install_targets)))
+    call(os_types[os] + package)
 
 
 def merge_files(output, pattern=None, comment="#"):

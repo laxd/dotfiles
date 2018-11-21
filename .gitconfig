@@ -1,13 +1,11 @@
 [user]
 	name = Lawrence Andrews
+    email = lawrence@lawrenceandrews.co.uk
 [push]
 	default = simple
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = vim
 	autocrlf = input
-[alias]
-	work = config user.email lawrence.andrews@influentialsoftware.com
-	personal = config user.email lawrence@lawrenceandrews.co.uk
 [web]
 	browser = google-chrome
