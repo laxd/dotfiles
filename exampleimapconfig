@@ -1,8 +1,0 @@
-set my_username="$USERNAME"
-set my_password="$PASSWORD"
-set my_imap_domain="$DOMAIN"
-set my_smtp_domain="$DOMAIN"
-set my_drafts_folder_name="$DRAFTS"
-set my_sent_folder_name="$SENT"
-set my_trash_folder_name="$TRASH"
-set my_realname="$NAME"

@@ -13,7 +13,7 @@ plugins=(git cp docker pip archlinux systemd)
 ##### User configuration
 
 # Set up path
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/bin:/opt/gradle/bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/bin:/opt/gradle/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
 
